@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output
+frontend/dist/
+frontend/build/
+
+# Environment & secrets
+.env
+.env.local
+.env.production
+*.pem
+*.key
+
+# AWS
+.aws/
+samconfig.toml
+.aws-sam/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Lambda deployment packages
+*.zip
+
+# Logs
+*.log
