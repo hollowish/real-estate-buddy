@@ -7,13 +7,13 @@ const TABLE = 'reb-users';
 
 export const handler = async (event) => {
   // Get userId from JWT claims (NOT from request body — prevents IDOR attacks)
-  const userId = event.requestContext?.authorizer?.jwt?.claims?.sub;
+  const userId = event.requestContext?.authorizer?.claims?.sub;
 
   if (!userId) {
     return response(401, { error: 'Unauthorized — no user id in token' });
   }
 
-  const method = event.requestContext.http.method;
+  const method = event.httpMethod;
   const body = event.body ? JSON.parse(event.body) : {};
 
   try {
