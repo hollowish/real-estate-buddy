@@ -9,7 +9,7 @@ A simplified AI-driven real estate scoring app built on AWS to learn cloud secur
 | Role | Element | Student |
 |------|---------|---------|
 | A | Auth & User Profile | TBD |
-| B | Listings Manager | TBD |
+| B | Listings Manager | Rob Her |
 | C | AI Scoring Engine | TBD |
 | D | Frontend Shell & Infrastructure | TBD |
 
