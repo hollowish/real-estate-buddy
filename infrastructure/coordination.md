@@ -47,8 +47,8 @@ These must exist before any Lambda can be tested. Craig sets them up first:
 | Cognito | Create `reb-user-pool` + app client (coordinate with Enayatullah on config) | Day 3 |
 | DynamoDB | Create `reb-users` table (partition key: `userId`) | Day 3 |
 | DynamoDB | Create `reb-listings` table (partition key: `listingId`, GSI: `userId-index`) | Day 3 |
-| S3 | Create `reb-photos-902917582511` (Block Public Access ON, SSE-S3) | Day 3 |
-| S3 | Create `reb-frontend-902917582511` (for React SPA) | Day 3 |
+| S3 | Create `reb-photos-[ACCOUNT_ID]` (Block Public Access ON, SSE-S3) | Day 3 |
+| S3 | Create `reb-frontend-[ACCOUNT_ID]` (for React SPA) | Day 3 |
 | IAM | Create `reb-auth-lambda-role` | Day 4 |
 | IAM | Create `reb-listings-lambda-role` | Day 4 |
 | IAM | Create `reb-ai-lambda-role` | Day 4 |
@@ -85,7 +85,7 @@ Repeat for `reb-auth-handler` and `reb-ai-scoring` as their code merges.
 | Wire API Gateway routes | Confirm all `/api/*` routes point to the correct Lambda functions |
 | Update `frontend/src/config.js` | Replace placeholders with real API Gateway URL, Cognito pool/client IDs |
 | S3 bucket policies | Lock down `reb-photos` to listings Lambda role only; `reb-frontend` to CloudFront only |
-| CloudFront | Create distribution pointing to `reb-frontend-902917582511`; wire `/api/*` to API Gateway |
+| CloudFront | Create distribution pointing to `reb-frontend-[ACCOUNT_ID]`; wire `/api/*` to API Gateway |
 | GitHub Actions secrets | Add `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID` to repo Settings → Secrets |
 | End-to-end deploy | Push to `main` → GitHub Action builds React → syncs to S3 → invalidates CloudFront |
 
@@ -107,5 +107,5 @@ Repeat for `reb-auth-handler` and `reb-ai-scoring` as their code merges.
 
 ```bash
 export AWS_PROFILE=class
-aws sts get-caller-identity   # confirm Account: "902917582511"
+aws sts get-caller-identity   # confirm Account: "[ACCOUNT_ID]"
 ```

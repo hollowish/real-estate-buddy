@@ -3,7 +3,7 @@
 ## AWS Account
 
 **Account name:** `class-sandbox`
-**Account ID:** `902917582511`
+**Account ID:** `[ACCOUNT_ID]`
 **Region:** `us-west-2`
 
 Craig (@hollowish) owns the AWS account and executes all infrastructure changes on behalf of the team. Teammates specify what they need; Craig creates it in AWS.
@@ -16,7 +16,7 @@ Craig uses AWS Organizations with two accounts. **Always confirm you are in the 
 
 ```bash
 export AWS_PROFILE=class
-aws sts get-caller-identity   # must show Account: "902917582511"
+aws sts get-caller-identity   # must show Account: "[ACCOUNT_ID]"
 ```
 
 AWS config (`~/.aws/config`):
@@ -27,7 +27,7 @@ region = us-west-2
 output = json
 
 [profile class]
-role_arn = arn:aws:iam::902917582511:role/OrganizationAccountAccessRole
+role_arn = arn:aws:iam::[ACCOUNT_ID]:role/OrganizationAccountAccessRole
 source_profile = default
 region = us-west-2
 ```
@@ -39,10 +39,10 @@ region = us-west-2
 
 ## Resource Naming
 
-All resources use the `class-sandbox` account ID (`902917582511`):
+All resources use the `class-sandbox` account ID (`[ACCOUNT_ID]`):
 
-- S3 photos bucket: `reb-photos-902917582511`
-- S3 frontend bucket: `reb-frontend-902917582511`
+- S3 photos bucket: `reb-photos-[ACCOUNT_ID]`
+- S3 frontend bucket: `reb-frontend-[ACCOUNT_ID]`
 - All other resources follow the `reb-*` naming convention
 
 ---
@@ -54,8 +54,8 @@ All resources use the `class-sandbox` account ID (`902917582511`):
    - `reb-users` — partition key: `userId` (String)
    - `reb-listings` — partition key: `listingId` (String), GSI: `userId-index`
 3. **S3 Buckets** — Craig creates both
-   - `reb-photos-902917582511` — photo uploads (Block Public Access ON, SSE-S3 enabled)
-   - `reb-frontend-902917582511` — React SPA hosting
+   - `reb-photos-[ACCOUNT_ID]` — photo uploads (Block Public Access ON, SSE-S3 enabled)
+   - `reb-frontend-[ACCOUNT_ID]` — React SPA hosting
 4. **IAM Execution Roles** — Craig creates all three
    - `reb-auth-lambda-role` — DynamoDB read/write on `reb-users` + CloudWatch Logs
    - `reb-listings-lambda-role` — DynamoDB read/write on `reb-listings` + S3 put/get on `reb-photos` + CloudWatch Logs
