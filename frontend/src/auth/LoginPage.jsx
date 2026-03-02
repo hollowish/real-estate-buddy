@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { signIn, confirmSignIn } from 'aws-amplify/auth';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from './AuthContext';
 
 export default function LoginPage() {
   const [step, setStep] = useState('credentials');

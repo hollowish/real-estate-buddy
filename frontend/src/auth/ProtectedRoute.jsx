@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from './AuthContext';
 
 /**
  * Wrap any page with this to require login.
