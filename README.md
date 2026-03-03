@@ -6,12 +6,14 @@ A simplified AI-driven real estate scoring app built on AWS to learn cloud secur
 
 ## Team
 
-| Role | Element | Student |
-|------|---------|---------|
-| A | Auth & User Profile | TBD |
-| B | Listings Manager | TBD |
-| C | AI Scoring Engine | TBD |
-| D | Frontend Shell & Infrastructure | TBD |
+| Role | Element | Student | GitHub |
+|------|---------|---------|--------|
+| A | Auth & User Profile | Enayatullah Frozenda | @cdeshonwilliams |
+| B | Listings Manager | Rob Her | @diggitydawg510 |
+| C | AI Scoring Engine | Craig Hollow | @hollowish |
+| D | Frontend Shell & Infrastructure | Carlton Williams | TBD |
+
+> **Note:** Craig (@hollowish) also owns the AWS account (`class-sandbox`) and is the GitHub repo admin. He reviews and merges all PRs and executes all AWS infrastructure changes on behalf of the team. See [`infrastructure/coordination.md`](infrastructure/coordination.md) for details.
 
 ## Tech Stack
 

@@ -1,43 +1,87 @@
 # AWS Infrastructure Setup Notes
 
-## Student D is responsible for initial setup of these services.
-## Other students will configure their own Lambda functions and tables.
+## AWS Account
 
-### AWS Services to Create (in order)
+**Account name:** `class-sandbox`
+**Account ID:** `[ACCOUNT_ID]`
+**Region:** `us-west-2`
 
-1. **Cognito User Pool** (Student A, but D helps with IAM)
-2. **DynamoDB Tables** (Students A + B)
+Craig (@hollowish) owns the AWS account and executes all infrastructure changes on behalf of the team. Teammates specify what they need; Craig creates it in AWS.
+
+---
+
+## CLI Setup
+
+Craig uses AWS Organizations with two accounts. **Always confirm you are in the right one before running any `reb-*` commands:**
+
+```bash
+export AWS_PROFILE=class
+aws sts get-caller-identity   # must show Account: "[ACCOUNT_ID]"
+```
+
+AWS config (`~/.aws/config`):
+
+```ini
+[default]
+region = us-west-2
+output = json
+
+[profile class]
+role_arn = arn:aws:iam::[ACCOUNT_ID]:role/OrganizationAccountAccessRole
+source_profile = default
+region = us-west-2
+```
+
+> **Warning:** The `default` profile points to Craig's personal resume-site account (`370686332271`).
+> Never run project commands without `--profile class` or `export AWS_PROFILE=class`.
+
+---
+
+## Resource Naming
+
+All resources use the `class-sandbox` account ID (`[ACCOUNT_ID]`):
+
+- S3 photos bucket: `reb-photos-[ACCOUNT_ID]`
+- S3 frontend bucket: `reb-frontend-[ACCOUNT_ID]`
+- All other resources follow the `reb-*` naming convention
+
+---
+
+## AWS Services to Create (in order)
+
+1. **Cognito User Pool** — Craig creates; Enayatullah (Student A) configures
+2. **DynamoDB Tables** — Craig creates both
    - `reb-users` — partition key: `userId` (String)
    - `reb-listings` — partition key: `listingId` (String), GSI: `userId-index`
-3. **S3 Buckets** (Students B + D)
-   - `reb-photos-{ACCOUNT_ID}` — photo uploads (Block Public Access ON)
-   - `reb-frontend-{ACCOUNT_ID}` — React SPA hosting
-4. **Lambda Functions** (Each student)
-   - `reb-auth-handler`
-   - `reb-listings-handler`
-   - `reb-ai-scoring`
-5. **IAM Execution Roles** (Student D creates, each student specifies permissions)
-   - `reb-auth-lambda-role`
-   - `reb-listings-lambda-role`
-   - `reb-ai-lambda-role`
-6. **API Gateway** (Student D)
+3. **S3 Buckets** — Craig creates both
+   - `reb-photos-[ACCOUNT_ID]` — photo uploads (Block Public Access ON, SSE-S3 enabled)
+   - `reb-frontend-[ACCOUNT_ID]` — React SPA hosting
+4. **IAM Execution Roles** — Craig creates all three
+   - `reb-auth-lambda-role` — DynamoDB read/write on `reb-users` + CloudWatch Logs
+   - `reb-listings-lambda-role` — DynamoDB read/write on `reb-listings` + S3 put/get on `reb-photos` + CloudWatch Logs
+   - `reb-ai-lambda-role` — DynamoDB read on `reb-listings` + `reb-users`, DynamoDB write on `reb-listings`, Bedrock InvokeModel + CloudWatch Logs
+5. **Lambda Functions** — Craig deploys each student's code as it merges to `main`
+   - `reb-auth-handler` (Enayatullah's code)
+   - `reb-listings-handler` (Rob's code)
+   - `reb-ai-scoring` (Craig's code)
+6. **API Gateway** — Craig creates and maintains
    - REST API with Cognito authorizer
-   - Routes for `/api/auth/*`, `/api/listings/*`, `/api/ai/*`
-7. **CloudFront Distribution** (Student D)
+   - Routes: `/api/auth/*`, `/api/listings/*`, `/api/ai/*`
+7. **CloudFront Distribution** — Craig creates
    - Origin: S3 frontend bucket
    - Behavior: `/api/*` → API Gateway
-8. **Bedrock Model Access** (Student C)
-   - Request access to Claude model in Bedrock console
-9. **CloudWatch** (Student D)
-   - Dashboard with Lambda metrics
-   - API Gateway access logging
+8. **Bedrock Model Access** — Craig requests in console
+   - Claude model access in `us-west-2`
+9. **CloudWatch** — Craig creates
+   - Dashboard with Lambda metrics and API Gateway access logging
 
-### Region: us-west-2 (Oregon)
+---
 
-### Cost Management
-- Use DynamoDB on-demand (PAY_PER_REQUEST) — no charges at low volume
+## Cost Management
+
+- Use DynamoDB on-demand (`PAY_PER_REQUEST`) — no charges at low volume
 - Lambda free tier: 1M requests/month
 - S3 free tier: 5 GB storage
 - CloudFront free tier: 1 TB transfer/month
-- Bedrock: pay-per-token (keep test prompts short!)
-- **Set a billing alarm at $10** to avoid surprises
+- Bedrock: pay-per-token (keep test prompts short)
+- **Set a billing alarm at $10 to avoid surprises**
