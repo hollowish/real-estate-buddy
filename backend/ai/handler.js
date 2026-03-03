@@ -17,8 +17,8 @@ const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
 const REGION = process.env.AWS_REGION || 'us-west-2';
 const LISTINGS_TABLE = process.env.LISTINGS_TABLE || 'reb-listings';
 const USERS_TABLE = process.env.USERS_TABLE || 'reb-users';
-// claude-3-5-haiku — fast, cheap, good enough for scoring
-const BEDROCK_MODEL_ID = process.env.BEDROCK_MODEL_ID || 'anthropic.claude-3-5-haiku-20241022-v1:0';
+// claude-3-haiku — confirmed working in this account
+const BEDROCK_MODEL_ID = process.env.BEDROCK_MODEL_ID || 'anthropic.claude-3-haiku-20240307-v1:0';
 
 const dynamo = new DynamoDBClient({ region: REGION });
 const bedrock = new BedrockRuntimeClient({ region: REGION });
