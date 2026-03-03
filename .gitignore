@@ -1,16 +1,15 @@
-<<<<<<< HEAD
+# Terraform
 .terraform/
 *.tfvars
-=======
+
 # Dependencies
 node_modules/
-package-lock.json
 
 # Build output
 frontend/dist/
 frontend/build/
 
-# Environment & secrets
+# Environment & secrets — never commit these
 .env
 .env.local
 .env.production
@@ -39,4 +38,3 @@ Thumbs.db
 # Logs
 *.log
 .claude/
->>>>>>> de6ceac3eccb2460e29c22ff5e8adcbb20b683f2
