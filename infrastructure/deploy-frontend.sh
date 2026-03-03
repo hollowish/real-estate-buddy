@@ -23,10 +23,9 @@ aws s3 sync frontend/dist/ "s3://$BUCKET/" \
 
 # HTML files: no-cache so users always get the latest app shell
 aws s3 sync frontend/dist/ "s3://$BUCKET/" \
-  --delete \
   --cache-control "no-cache" \
-  --include "*.html" \
-  --exclude "*"
+  --exclude "*" \
+  --include "*.html"
 
 echo "  S3 sync complete."
 
