@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UserProfile",
+  "description": "User profile and home-buying preferences",
+  "type": "object",
+  "required": ["userId", "email", "createdAt"],
+  "properties": {
+    "userId": {
+      "type": "string",
+      "description": "Cognito sub (from JWT token)"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "preferences": {
+      "type": "object",
+      "properties": {
+        "minBedrooms": { "type": "integer" },
+        "maxPrice": { "type": "number" },
+        "mustHave": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Features the user requires (e.g. garage, backyard)"
+        },
+        "dealBreakers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Absolute no-go features (e.g. flood zone, HOA > 500)"
+        },
+        "preferredAreas": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "commuteAddress": {
+          "type": "string",
+          "description": "Work address for commute calculations"
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

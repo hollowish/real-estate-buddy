@@ -1,0 +1,11 @@
+{
+  "name": "reb-ai-scoring",
+  "version": "1.0.0",
+  "description": "AI Scoring Engine Lambda for Real Estate Buddy",
+  "main": "handler.js",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.0.0",
+    "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/util-dynamodb": "^3.0.0"
+  }
+}
