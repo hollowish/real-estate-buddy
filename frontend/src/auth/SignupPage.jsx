@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { signUp, confirmSignUp, signIn, setUpTOTP, verifyTOTPSetup } from 'aws-amplify/auth';
+import { signUp, confirmSignUp, signIn, signOut, setUpTOTP, verifyTOTPSetup } from 'aws-amplify/auth';
 
 export default function SignupPage() {
   const [step, setStep] = useState(1);
@@ -38,6 +38,7 @@ export default function SignupPage() {
     setError(''); setLoading(true);
     try {
       await verifyTOTPSetup({ code: totpCode });
+      await signOut();
       window.location.href = '/login';
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }
