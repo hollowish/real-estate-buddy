@@ -1,0 +1,48 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DynamoDBListingsTable",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:Query"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:us-west-2:{ACCOUNT_ID}:table/reb-listings",
+        "arn:aws:dynamodb:us-west-2:{ACCOUNT_ID}:table/reb-listings/index/userId-index"
+      ]
+    },
+    {
+      "Sid": "S3PhotosBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject"
+      ],
+      "Resource": "arn:aws:s3:::reb-photos-{ACCOUNT_ID}/*"
+    },
+    {
+      "Sid": "CloudWatchLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": [
+        "arn:aws:logs:us-west-2:{ACCOUNT_ID}:log-group:/aws/lambda/reb-listings-handler",
+        "arn:aws:logs:us-west-2:{ACCOUNT_ID}:log-group:/aws/lambda/reb-listings-handler:*"
+      ]
+    },
+    {
+      "Sid": "DenyUsersTable",
+      "Effect": "Deny",
+      "Action": "dynamodb:*",
+      "Resource": "arn:aws:dynamodb:us-west-2:{ACCOUNT_ID}:table/reb-users"
+    }
+  ]
+}
