@@ -2,9 +2,9 @@
 // ⚠️ Replace with YOUR actual values from the AWS Console
 
 export const awsConfig = {
-  region: 'us-east-1',                   // your AWS region
-  userPoolId: 'us-east-1_XXXXXXXXX',     // Cognito → User Pool details
-  clientId: 'XXXXXXXXXXXXXXXXXXXXXXXXXX', // Cognito → App clients
+  region: 'us-wast-2',                   // your AWS region
+  userPoolId: 'us-west-2_67E39NjQ1',     // Cognito → User Pool details
+  clientId: '79lon5asqe452blgqk2nh0gl1s', // Cognito → App clients
 };
 
 // In your src/main.jsx, add:
