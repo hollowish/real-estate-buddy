@@ -6,6 +6,11 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const { pathname } = useLocation();
 
+  // Resolve a human-readable display name.
+  // Amplify's getCurrentUser() returns username as the Cognito sub (UUID);
+  // signInDetails.loginId holds the email / alias used at sign-in.
+  const displayName = user?.signInDetails?.loginId || user?.username;
+
   const linkClass = (path) =>
     `text-sm font-medium transition-colors ${
       pathname === path
@@ -27,7 +32,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3 pl-4 border-l border-gray-700">
             {user && (
               <span className="text-sm text-gray-500 hidden sm:block">
-                {user.username}
+                {displayName}
               </span>
             )}
             <button
