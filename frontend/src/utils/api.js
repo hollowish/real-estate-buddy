@@ -23,7 +23,7 @@ async function request(path, options = {}) {
   const response = await fetch(url, { ...options, headers });
 
   if (response.status === 401) {
-    window.location.href = '/login';
+    window.location.href = '/';
     return response;
   }
 

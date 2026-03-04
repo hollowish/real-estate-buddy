@@ -1,22 +1,399 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
+/* ═══════════════════════════════════════════════════════════════
+   REALESTATE BUDDY — Global Design System
+   Navy × Gold — Dark Premium Theme
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── CSS Variables ─────────────────────────────────────────────────────────── */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Backgrounds */
+  --bg-primary:      #0a0e1a;
+  --bg-secondary:    #111827;
+  --bg-navy:         #1a2744;
+  --bg-elevated:     #1c2639;
+
+  /* Accents */
+  --gold:            #f0b429;
+  --gold-hover:      #d9a020;
+  --gold-dim:        #c49a1f;
+  --gold-muted:      rgba(240, 180, 41, 0.12);
+  --gold-glow:       0 0 24px rgba(240, 180, 41, 0.22);
+
+  /* Text */
+  --text-primary:    #ffffff;
+  --text-secondary:  #9ca3af;
+  --text-muted:      #6b7280;
+
+  /* Borders */
+  --border:          #1f2d4a;
+  --border-light:    rgba(255, 255, 255, 0.06);
+
+  /* Feedback */
+  --error:           #ef4444;
+  --error-muted:     rgba(239, 68, 68, 0.12);
+  --success:         #10b981;
+  --success-muted:   rgba(16, 185, 129, 0.12);
+  --warning:         #f59e0b;
+
+  /* Radius scale */
+  --radius-xs:       4px;
+  --radius-sm:       6px;
+  --radius-md:       10px;
+  --radius-lg:       16px;
+  --radius-xl:       24px;
+  --radius-pill:     9999px;
+
+  /* Shadow scale */
+  --shadow-xs:       0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm:       0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-md:       0 6px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg:       0 16px 48px rgba(0, 0, 0, 0.65);
+  --shadow-gold:     0 4px 20px rgba(240, 180, 41, 0.25);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.22s ease;
+  --transition-slow: 0.35s ease;
+
+  /* Typography */
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Reset ─────────────────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 body {
-  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   min-width: 320px;
+  overflow-x: hidden;
 }
 
 #root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Typography ────────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+h1 { font-size: clamp(1.75rem, 4vw, 3rem);   font-weight: 800; }
+h2 { font-size: clamp(1.35rem, 3vw, 2.1rem); }
+h3 { font-size: clamp(1.1rem,  2vw, 1.4rem); }
+h4 { font-size: 1.1rem; }
+h5 { font-size: 0.95rem; letter-spacing: 0.04em; text-transform: uppercase; }
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+small {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ── Links ─────────────────────────────────────────────────────────────────── */
+a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+a:hover {
+  color: var(--gold-hover);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+button {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.6em 1.4em;
+  transition:
+    background    var(--transition-base),
+    color         var(--transition-base),
+    border-color  var(--transition-base),
+    box-shadow    var(--transition-base),
+    transform     var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Primary — gold fill */
+.btn-primary {
+  background: var(--gold);
+  color: #0a0e1a;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--gold-hover);
+  box-shadow: var(--shadow-gold);
+}
+
+/* Secondary — gold outline */
+.btn-secondary {
+  background: transparent;
+  color: var(--gold);
+  border: 2px solid var(--gold);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--gold-muted);
+}
+
+/* Ghost — subtle surface */
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--gold);
+}
+
+/* Danger */
+.btn-danger {
+  background: var(--error);
+  color: #fff;
+}
+.btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+/* Size modifiers */
+.btn-sm {
+  font-size: 0.82rem;
+  padding: 0.45em 1em;
+  border-radius: var(--radius-sm);
+}
+.btn-lg {
+  font-size: 1.05rem;
+  padding: 0.8em 2em;
+  border-radius: var(--radius-lg);
+}
+.btn-pill {
+  border-radius: var(--radius-pill);
+}
+
+/* ── Form Elements ─────────────────────────────────────────────────────────── */
+label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 1rem;
   width: 100%;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-muted);
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.form-error {
+  font-size: 0.78rem;
+  color: var(--error);
+}
+
+/* ── Cards ─────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
+}
+
+.card-hover:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--bg-elevated);
+  transform: translateY(-2px);
+}
+
+.card-gold:hover {
+  border-color: var(--gold);
+  box-shadow: var(--shadow-gold);
+}
+
+/* ── Badge ─────────────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.25em 0.7em;
+  border-radius: var(--radius-pill);
+  background: var(--gold-muted);
+  color: var(--gold);
+  border: 1px solid rgba(240, 180, 41, 0.25);
+}
+
+.badge-error   { background: var(--error-muted);   color: var(--error);   border-color: rgba(239,68,68,0.25); }
+.badge-success { background: var(--success-muted); color: var(--success); border-color: rgba(16,185,129,0.25); }
+.badge-navy    { background: var(--bg-navy);        color: var(--text-secondary); border-color: var(--border); }
+
+/* ── Divider ───────────────────────────────────────────────────────────────── */
+hr, .divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+/* ── Utility classes ───────────────────────────────────────────────────────── */
+.text-gold     { color: var(--gold); }
+.text-muted    { color: var(--text-secondary); }
+.text-dim      { color: var(--text-muted); }
+.text-error    { color: var(--error); }
+.text-success  { color: var(--success); }
+
+.bg-primary    { background: var(--bg-primary); }
+.bg-secondary  { background: var(--bg-secondary); }
+.bg-navy       { background: var(--bg-navy); }
+.bg-elevated   { background: var(--bg-elevated); }
+
+.border-gold   { border-color: var(--gold) !important; }
+.shadow-gold   { box-shadow: var(--shadow-gold); }
+
+/* ── Page layout helpers ───────────────────────────────────────────────────── */
+.page-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.page-section {
+  padding: 4rem 0;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar            { width: 6px; height: 6px; }
+::-webkit-scrollbar-track      { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb      { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover{ background: var(--gold); }
+
+/* ── Text selection ────────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(240, 180, 41, 0.28);
+  color: var(--text-primary);
+}
+
+/* ── Focus ring (accessibility) ────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
 }
