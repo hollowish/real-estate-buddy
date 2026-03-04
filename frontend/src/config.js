@@ -9,17 +9,17 @@
 
 const config = {
   // API Gateway base URL — all /api/* requests go here
-  apiUrl: import.meta.env.VITE_API_URL || '',
+  apiUrl: import.meta.env.VITE_API_URL || 'https://8p2oc737d9.execute-api.us-west-2.amazonaws.com/prod',
 
   // Cognito User Pool — set by Student A after pool is created
   cognito: {
-    userPoolId: import.meta.env.VITE_COGNITO_USER_POOL_ID || '',
-    clientId: import.meta.env.VITE_COGNITO_CLIENT_ID || '',
+    userPoolId: import.meta.env.VITE_COGNITO_USER_POOL_ID || 'us-west-2_67E39NjQ1',
+    clientId: import.meta.env.VITE_COGNITO_CLIENT_ID || '79lon5asqe452blgqk2nh0gl1s',
     region: import.meta.env.VITE_AWS_REGION || 'us-west-2',
   },
 
   // S3 photos bucket name — set by Student B after bucket is created
-  photosBucket: import.meta.env.VITE_PHOTOS_BUCKET || '',
+  photosBucket: import.meta.env.VITE_PHOTOS_BUCKET || 'reb-photos-902917582511',
 };
 
 export default config;
