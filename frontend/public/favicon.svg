@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a3a6b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f2347;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="roofGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5c518;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d4a012;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="wallGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2255a4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a3a6b;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="31" fill="url(#skyGrad)" />
+  <circle cx="32" cy="32" r="31" fill="none" stroke="#f5c518" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Chimney -->
+  <rect x="42" y="18" width="6" height="10" rx="1" fill="#d4a012"/>
+  <rect x="41" y="17" width="8" height="2.5" rx="1" fill="#f5c518"/>
+
+  <!-- Roof -->
+  <polygon points="10,34 32,12 54,34" fill="url(#roofGrad)" filter="url(#glow)"/>
+  <!-- Roof underside shadow -->
+  <polygon points="10,34 32,14 54,34 52,34 32,16 12,34" fill="#c49010" opacity="0.3"/>
+  <!-- Roof ridge highlight -->
+  <line x1="32" y1="12" x2="32" y2="14" stroke="#fff" stroke-width="1" opacity="0.5"/>
+
+  <!-- House body -->
+  <rect x="15" y="33" width="34" height="22" rx="1.5" fill="url(#wallGrad)"/>
+
+  <!-- Door -->
+  <rect x="27" y="42" width="10" height="13" rx="2" fill="#0f2347"/>
+  <rect x="28" y="43" width="8" height="11" rx="1.5" fill="#0a1a38" opacity="0.8"/>
+  <!-- Door knob -->
+  <circle cx="35.5" cy="49" r="1" fill="#f5c518"/>
+  <!-- Door arch top -->
+  <path d="M27,44 Q32,39 37,44" fill="#f5c518" opacity="0.25"/>
+
+  <!-- Left window -->
+  <rect x="17" y="37" width="8" height="7" rx="1.5" fill="#f5c518" opacity="0.15"/>
+  <rect x="17" y="37" width="8" height="7" rx="1.5" fill="none" stroke="#f5c518" stroke-width="1.2"/>
+  <line x1="21" y1="37" x2="21" y2="44" stroke="#f5c518" stroke-width="0.8" opacity="0.7"/>
+  <line x1="17" y1="40.5" x2="25" y2="40.5" stroke="#f5c518" stroke-width="0.8" opacity="0.7"/>
+
+  <!-- Right window -->
+  <rect x="39" y="37" width="8" height="7" rx="1.5" fill="#f5c518" opacity="0.15"/>
+  <rect x="39" y="37" width="8" height="7" rx="1.5" fill="none" stroke="#f5c518" stroke-width="1.2"/>
+  <line x1="43" y1="37" x2="43" y2="44" stroke="#f5c518" stroke-width="0.8" opacity="0.7"/>
+  <line x1="39" y1="40.5" x2="47" y2="40.5" stroke="#f5c518" stroke-width="0.8" opacity="0.7"/>
+
+  <!-- Stoop / step -->
+  <rect x="24" y="54" width="16" height="2.5" rx="1" fill="#f5c518" opacity="0.5"/>
+
+  <!-- Stars -->
+  <circle cx="14" cy="18" r="1" fill="#f5c518" opacity="0.7"/>
+  <circle cx="50" cy="14" r="1.2" fill="#f5c518" opacity="0.8"/>
+  <circle cx="22" cy="10" r="0.8" fill="#f5c518" opacity="0.6"/>
+  <circle cx="45" cy="22" r="0.7" fill="#f5c518" opacity="0.5"/>
+</svg>
