@@ -4,6 +4,7 @@ import ProtectedRoute from './auth/ProtectedRoute'
 import Layout from './components/shared/Layout'
 import LoginPage from './auth/LoginPage'
 import SignupPage from './auth/SignupPage'
+import HomePage from './pages/HomePage'
 import ListingsPage from './components/listings/ListingsPage'
 import ListingDetail from './components/listings/ListingDetail'
 import AddListingForm from './components/listings/AddListingForm'
@@ -16,7 +17,7 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/" element={<Navigate to="/listings" replace />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/listings" element={
             <ProtectedRoute><Layout><ListingsPage /></Layout></ProtectedRoute>
           } />
