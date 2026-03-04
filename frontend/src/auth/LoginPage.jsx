@@ -12,13 +12,9 @@ export default function LoginPage() {
   const [mfaCode, setMfaCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, token } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const mfaRef = useRef(null);
-
-  useEffect(() => {
-    if (token) navigate('/listings', { replace: true });
-  }, [token]);
 
   useEffect(() => {
     if (step === 'mfa') {
@@ -29,11 +25,15 @@ export default function LoginPage() {
   const handleCredentials = async () => {
     setError(''); setLoading(true);
     try {
-      // Clear any stale session left over from the signup flow
       try { await signOut(); } catch {}
       const result = await signIn({ username: email, password });
-      if (result.nextStep.signInStep === 'CONFIRM_SIGN_IN_WITH_TOTP_CODE') {
+      if (result.isSignedIn) {
+        await login();
+        navigate('/listings', { replace: true });
+      } else if (result.nextStep.signInStep === 'CONFIRM_SIGN_IN_WITH_TOTP_CODE') {
         setStep('mfa');
+      } else {
+        setError(`Unexpected sign-in step: ${result.nextStep.signInStep}`);
       }
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }
@@ -45,6 +45,7 @@ export default function LoginPage() {
       const result = await confirmSignIn({ challengeResponse: mfaCode });
       if (result.isSignedIn) {
         await login();
+        navigate('/listings', { replace: true });
       }
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }

@@ -11,13 +11,15 @@ export function AuthProvider({ children }) {
   useEffect(() => { checkSession(); }, []);
 
   const checkSession = async () => {
+    setLoading(true);
     try {
       const session = await fetchAuthSession();
       const currentUser = await getCurrentUser();
       setToken(session.tokens?.accessToken?.toString());
       setUser(currentUser);
     } catch {
-      // Not logged in
+      setToken(null);
+      setUser(null);
     } finally { setLoading(false); }
   };
 
