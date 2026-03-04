@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { signUp, confirmSignUp, signIn, signOut, setUpTOTP, verifyTOTPSetup } from 'aws-amplify/auth';
+import { Link } from 'react-router-dom';
+
+const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
 
 export default function SignupPage() {
   const [step, setStep] = useState(1);
@@ -11,6 +14,13 @@ export default function SignupPage() {
   const [totpCode, setTotpCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const codeRef = useRef(null);
+  const totpRef = useRef(null);
+
+  useEffect(() => {
+    if (step === 2) setTimeout(() => codeRef.current?.focus(), 50);
+    if (step === 3) setTimeout(() => totpRef.current?.focus(), 150);
+  }, [step]);
 
   const handleSignup = async () => {
     if (password !== confirm) { setError('Passwords do not match'); return; }
@@ -44,36 +54,106 @@ export default function SignupPage() {
     finally { setLoading(false); }
   };
 
+  const steps = ['Account', 'Verify Email', 'Set Up MFA'];
+
   return (
-    <div>
-      {error && <p style={{color:'red'}}>{error}</p>}
-      {step === 1 && (
-        <div>
-          <h2>Create Account</h2>
-          <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-          <input type="password" placeholder="Confirm Password" value={confirm} onChange={e => setConfirm(e.target.value)} />
-          <button onClick={handleSignup} disabled={loading}>{loading ? 'Creating...' : 'Sign Up'}</button>
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
+      <div className="bg-gray-800 rounded-xl shadow-xl shadow-gray-900/50 p-8 w-full max-w-sm">
+        <h1 className="text-2xl font-bold text-gray-100 mb-1">Create Account</h1>
+
+        {/* Step indicator */}
+        <div className="flex items-center gap-2 mb-6 mt-2">
+          {steps.map((label, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
+                ${i + 1 <= step ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-400'}`}>
+                {i + 1}
+              </div>
+              {i < steps.length - 1 && (
+                <div className={`h-0.5 w-6 ${i + 1 < step ? 'bg-indigo-600' : 'bg-gray-700'}`} />
+              )}
+            </div>
+          ))}
+          <span className="text-xs text-gray-400 ml-1">{steps[step - 1]}</span>
         </div>
-      )}
-      {step === 2 && (
-        <div>
-          <h2>Check Your Email</h2>
-          <p>We sent a 6-digit code to {email}</p>
-          <input placeholder="Enter code" value={code} onChange={e => setCode(e.target.value)} />
-          <button onClick={handleConfirmEmail} disabled={loading}>Verify Email</button>
-        </div>
-      )}
-      {step === 3 && (
-        <div>
-          <h2>Set Up Authenticator App</h2>
-          <p>Scan this QR code with Google Authenticator or Authy</p>
-          <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=` + encodeURIComponent(qrCode)} alt="MFA QR Code" />
-          <p>Then enter the 6-digit code from the app:</p>
-          <input placeholder="Code from app" value={totpCode} onChange={e => setTotpCode(e.target.value)} />
-          <button onClick={handleVerifyMFA} disabled={loading}>Finish Setup</button>
-        </div>
-      )}
+
+        {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
+
+        {step === 1 && (
+          <div className="space-y-4">
+            <input type="email" placeholder="Email" value={email}
+              onChange={e => setEmail(e.target.value)} className={inputClass} />
+            <input type="password" placeholder="Password" value={password}
+              onChange={e => setPassword(e.target.value)} className={inputClass} />
+            <input type="password" placeholder="Confirm Password" value={confirm}
+              onChange={e => setConfirm(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSignup()}
+              className={inputClass} />
+            <button onClick={handleSignup} disabled={loading}
+              className="w-full py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
+                         hover:bg-indigo-700 disabled:opacity-50 transition-colors">
+              {loading ? 'Creating account…' : 'Create Account'}
+            </button>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="space-y-4">
+            <p className="text-sm text-gray-400">We sent a 6-digit code to <strong className="text-gray-200">{email}</strong></p>
+            <input
+              ref={codeRef}
+              type="text" placeholder="Verification code" value={code}
+              autoComplete="one-time-code"
+              onChange={e => setCode(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleConfirmEmail()}
+              className={inputClass + ' text-center text-lg'}
+            />
+            <button onClick={handleConfirmEmail} disabled={loading}
+              className="w-full py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
+                         hover:bg-indigo-700 disabled:opacity-50 transition-colors">
+              {loading ? 'Verifying…' : 'Verify Email'}
+            </button>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="space-y-4">
+            <p className="text-sm text-gray-400">
+              Scan this QR code with <strong className="text-gray-200">Google Authenticator</strong> or <strong className="text-gray-200">Authy</strong>
+            </p>
+            {qrCode && (
+              <div className="flex justify-center" style={{ minHeight: '180px' }}>
+                <img
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&bgcolor=1f2937&color=f3f4f6&data=${encodeURIComponent(qrCode)}`}
+                  alt="MFA QR Code"
+                  className="rounded-lg border border-gray-600"
+                />
+              </div>
+            )}
+            <p className="text-sm text-gray-400 text-center">Then enter the 6-digit code from the app:</p>
+            <input
+              ref={totpRef}
+              type="text" placeholder="Code from app" value={totpCode} maxLength={6}
+              inputMode="numeric"
+              onChange={e => setTotpCode(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleVerifyMFA()}
+              className={inputClass + ' text-center text-lg tracking-widest'}
+            />
+            <button onClick={handleVerifyMFA} disabled={loading}
+              className="w-full py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
+                         hover:bg-indigo-700 disabled:opacity-50 transition-colors">
+              {loading ? 'Finishing setup…' : 'Finish Setup'}
+            </button>
+          </div>
+        )}
+
+        {step === 1 && (
+          <p className="text-center text-sm text-gray-400 mt-5">
+            Already have an account?{' '}
+            <Link to="/login" className="text-indigo-400 hover:underline font-medium">Sign in</Link>
+          </p>
+        )}
+      </div>
     </div>
   );
 }

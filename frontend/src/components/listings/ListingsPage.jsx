@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../utils/api.js';
+import { useAuth } from '../../auth/AuthContext.jsx';
 
 export default function ListingsPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,14 +23,20 @@ export default function ListingsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="p-8 text-center text-gray-400">Loading…</div>;
-  if (error)   return <div className="p-8 text-center text-red-500">{error}</div>;
+  if (loading) return <div className="p-8 text-center text-gray-500">Loading…</div>;
+  if (error)   return <div className="p-8 text-center text-red-400">{error}</div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
 
+      {user && (
+        <p className="text-sm text-gray-400 mb-6">
+          Welcome back, <span className="text-gray-200 font-medium">{user.username}</span>
+        </p>
+      )}
+
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">My Listings</h1>
+        <h1 className="text-2xl font-bold text-gray-100">My Listings</h1>
         <button
           onClick={() => navigate('/listings/new')}
           className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
@@ -39,11 +47,11 @@ export default function ListingsPage() {
       </div>
 
       {listings.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-gray-500">
           <p className="text-lg mb-3">No listings yet.</p>
           <button
             onClick={() => navigate('/listings/new')}
-            className="text-indigo-600 hover:underline text-sm font-medium"
+            className="text-indigo-400 hover:underline text-sm font-medium"
           >
             Add your first listing →
           </button>
@@ -68,15 +76,15 @@ function ListingCard({ listing }) {
   return (
     <Link
       to={`/listings/${listingId}`}
-      className="block rounded-xl border border-gray-200 bg-white p-5 hover:shadow-md transition-shadow"
+      className="block rounded-xl border border-gray-700 bg-gray-800 p-5 hover:border-gray-600 hover:shadow-lg hover:shadow-gray-900/50 transition-all"
     >
-      {/* Photo placeholder — actual photos need CloudFront (Student D) */}
-      <div className="w-full h-36 rounded-lg bg-gray-100 flex items-center justify-center mb-4">
+      {/* Photo placeholder */}
+      <div className="w-full h-36 rounded-lg bg-gray-700 flex items-center justify-center mb-4">
         <span className="text-5xl">🏠</span>
       </div>
 
-      <h2 className="font-semibold text-gray-800 text-sm leading-snug mb-1 truncate">{address}</h2>
-      <p className="text-indigo-600 font-bold text-lg mb-3">${price?.toLocaleString()}</p>
+      <h2 className="font-semibold text-gray-100 text-sm leading-snug mb-1 truncate">{address}</h2>
+      <p className="text-indigo-400 font-bold text-lg mb-3">${price?.toLocaleString()}</p>
 
       <div className="flex items-center justify-between">
         <StarDisplay rating={userRating} />
@@ -85,7 +93,7 @@ function ListingCard({ listing }) {
             AI: {aiScore}
           </span>
         ) : (
-          <span className="text-xs text-gray-300">Not scored</span>
+          <span className="text-xs text-gray-600">Not scored</span>
         )}
       </div>
     </Link>
@@ -95,7 +103,7 @@ function ListingCard({ listing }) {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function StarDisplay({ rating }) {
-  if (!rating) return <span className="text-xs text-gray-300">No rating</span>;
+  if (!rating) return <span className="text-xs text-gray-600">No rating</span>;
   return (
     <span className="text-yellow-400 text-sm tracking-tight" aria-label={`${rating} out of 5 stars`}>
       {'★'.repeat(rating)}{'☆'.repeat(5 - rating)}
@@ -104,7 +112,7 @@ function StarDisplay({ rating }) {
 }
 
 function scoreBadgeClass(score) {
-  if (score >= 70) return 'bg-green-100 text-green-700';
-  if (score >= 40) return 'bg-yellow-100 text-yellow-700';
-  return 'bg-red-100 text-red-700';
+  if (score >= 70) return 'bg-green-900/50 text-green-400';
+  if (score >= 40) return 'bg-yellow-900/50 text-yellow-400';
+  return 'bg-red-900/50 text-red-400';
 }

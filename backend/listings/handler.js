@@ -15,166 +15,153 @@
 // - Photos go directly from browser to S3 (never through Lambda)
 
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, UpdateCommand, DeleteCommand } = require('@aws-sdk/lib-dynamodb');
+const {
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  QueryCommand,
+  UpdateCommand,
+  DeleteCommand,
+} = require('@aws-sdk/lib-dynamodb');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 
-const REGION = process.env.AWS_REGION || 'us-west-2';
+const db = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+const s3 = new S3Client({ region: process.env.AWS_REGION || 'us-west-2' });
+
 const TABLE = process.env.LISTINGS_TABLE || 'reb-listings';
-const BUCKET = process.env.PHOTOS_BUCKET;
-
-const db = DynamoDBDocumentClient.from(new DynamoDBClient({ region: REGION }));
-const s3 = new S3Client({ region: REGION });
-
-// Fields a user is allowed to change — listingId, userId, createdAt are never updatable
-const UPDATABLE_FIELDS = ['address', 'price', 'bedrooms', 'bathrooms', 'sqft', 'mlsNumber', 'userNotes', 'userRating', 'photos'];
-
-// ─── Main handler ─────────────────────────────────────────────────────────────
+const BUCKET = process.env.PHOTOS_BUCKET || 'reb-photos-902917582511';
 
 exports.handler = async (event) => {
-  // userId from Cognito JWT claims set by API Gateway authorizer — never from request body
+  // Extract userId from JWT claims — never trust request body for identity
   const userId = event.requestContext?.authorizer?.claims?.sub;
-  if (!userId) return respond(401, { error: 'Unauthorized' });
+  if (!userId) return response(401, { error: 'Unauthorized' });
 
   const method = event.httpMethod;
   const listingId = event.pathParameters?.id;
-
-  let body = {};
-  if (event.body) {
-    try {
-      body = JSON.parse(event.body);
-    } catch {
-      return respond(400, { error: 'Invalid request body' });
-    }
-  }
+  const body = event.body ? JSON.parse(event.body) : {};
 
   try {
-    if (method === 'POST'   && !listingId) return await createListing(userId, body);
-    if (method === 'GET'    && !listingId) return await listListings(userId);
-    if (method === 'GET'    &&  listingId) return await getListing(userId, listingId);
-    if (method === 'PUT'    &&  listingId) return await updateListing(userId, listingId, body);
-    if (method === 'DELETE' &&  listingId) return await deleteListing(userId, listingId);
-    return respond(405, { error: 'Method not allowed' });
+    // POST /api/listings — create listing + presigned upload URL
+    if (method === 'POST' && !listingId) {
+      const { address, price } = body;
+      if (!address || address.toString().trim() === '') {
+        return response(400, { error: 'address is required' });
+      }
+      if (price === undefined || price === null || isNaN(Number(price))) {
+        return response(400, { error: 'price must be a number' });
+      }
+
+      const newId = randomUUID();
+      const now = new Date().toISOString();
+      const s3Key = `${userId}/${newId}/${Date.now()}`;
+
+      const listing = {
+        listingId: newId,
+        userId,
+        address: address.toString().trim().slice(0, 500),
+        price: Number(price),
+        bedrooms:   body.bedrooms   !== undefined ? Number(body.bedrooms)   : null,
+        bathrooms:  body.bathrooms  !== undefined ? Number(body.bathrooms)  : null,
+        sqft:       body.sqft       !== undefined ? Number(body.sqft)       : null,
+        mlsNumber:  body.mlsNumber  ? body.mlsNumber.toString().slice(0, 50)  : null,
+        userNotes:  body.userNotes  ? body.userNotes.toString().slice(0, 5000) : null,
+        userRating: body.userRating ? Number(body.userRating) : null,
+        photos: [s3Key],
+        aiScore: null,
+        aiAnalysis: null,
+        aiScoredAt: null,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      await db.send(new PutCommand({ TableName: TABLE, Item: listing }));
+
+      // Generate presigned S3 PUT URL for photo upload (browser uploads directly)
+      const uploadUrl = await getSignedUrl(
+        s3,
+        new PutObjectCommand({ Bucket: BUCKET, Key: s3Key }),
+        { expiresIn: 900 } // 15 minutes
+      );
+
+      return response(201, { listing, uploadUrl });
+    }
+
+    // GET /api/listings — list all listings for this user
+    if (method === 'GET' && !listingId) {
+      const result = await db.send(new QueryCommand({
+        TableName: TABLE,
+        IndexName: 'userId-index',
+        KeyConditionExpression: 'userId = :uid',
+        ExpressionAttributeValues: { ':uid': userId },
+      }));
+      return response(200, { listings: result.Items || [] });
+    }
+
+    // GET /api/listings/{id} — get single listing
+    if (method === 'GET' && listingId) {
+      const item = await getAndVerify(listingId, userId);
+      if (item.error) return response(item.status, { error: item.error });
+      return response(200, item);
+    }
+
+    // PUT /api/listings/{id} — update listing
+    if (method === 'PUT' && listingId) {
+      const item = await getAndVerify(listingId, userId);
+      if (item.error) return response(item.status, { error: item.error });
+
+      const fields = ['address', 'price', 'bedrooms', 'bathrooms', 'sqft',
+                      'mlsNumber', 'userNotes', 'userRating'];
+      const sets = ['updatedAt = :updatedAt'];
+      const vals = { ':updatedAt': new Date().toISOString() };
+
+      for (const f of fields) {
+        if (body[f] !== undefined) {
+          sets.push(`#${f} = :${f}`);
+          vals[`:${f}`] = body[f];
+        }
+      }
+
+      await db.send(new UpdateCommand({
+        TableName: TABLE,
+        Key: { listingId },
+        UpdateExpression: 'SET ' + sets.join(', '),
+        ExpressionAttributeNames: Object.fromEntries(
+          fields.filter(f => body[f] !== undefined).map(f => [`#${f}`, f])
+        ),
+        ExpressionAttributeValues: vals,
+      }));
+
+      return response(200, { message: 'Listing updated' });
+    }
+
+    // DELETE /api/listings/{id} — delete listing (S3 photo cleanup is best-effort)
+    if (method === 'DELETE' && listingId) {
+      const item = await getAndVerify(listingId, userId);
+      if (item.error) return response(item.status, { error: item.error });
+
+      await db.send(new DeleteCommand({ TableName: TABLE, Key: { listingId } }));
+      return response(200, { message: 'Listing deleted' });
+    }
+
+    return response(405, { error: 'Method not allowed' });
+
   } catch (err) {
-    console.error(err);
-    return respond(500, { error: 'Internal server error' });
+    console.error('Listings handler error:', err);
+    return response(500, { error: 'Internal server error' });
   }
 };
 
-// ─── Route handlers ───────────────────────────────────────────────────────────
-
-async function createListing(userId, body) {
-  if (!body.address || body.price == null) {
-    return respond(400, { error: 'address and price are required' });
-  }
-
-  const listingId = uuidv4();
-  const now = new Date().toISOString();
-
-  const listing = {
-    listingId,
-    userId,
-    address:    body.address,
-    price:      body.price,
-    bedrooms:   body.bedrooms   ?? null,
-    bathrooms:  body.bathrooms  ?? null,
-    sqft:       body.sqft       ?? null,
-    mlsNumber:  body.mlsNumber  ?? null,
-    userNotes:  body.userNotes  ?? '',
-    userRating: body.userRating ?? null,
-    photos:     [],
-    aiScore:    null,
-    aiAnalysis: null,
-    createdAt:  now,
-    updatedAt:  now,
-  };
-
-  await db.send(new PutCommand({ TableName: TABLE, Item: listing }));
-
-  // B.4 — Generate a presigned PUT URL (15 min) so the browser uploads the photo
-  // directly to S3. The Lambda never handles the file bytes.
-  const photoKey = `${userId}/${listingId}/photo-1`;
-  const uploadUrl = await getSignedUrl(
-    s3,
-    new PutObjectCommand({ Bucket: BUCKET, Key: photoKey }),
-    { expiresIn: 900 },
-  );
-
-  return respond(201, { listing, uploadUrl, photoKey });
-}
-
-async function listListings(userId) {
-  const result = await db.send(new QueryCommand({
-    TableName: TABLE,
-    IndexName: 'userId-index',
-    KeyConditionExpression: 'userId = :uid',
-    ExpressionAttributeValues: { ':uid': userId },
-  }));
-
-  return respond(200, { listings: result.Items });
-}
-
-async function getListing(userId, listingId) {
+// Fetch a listing and verify it belongs to the requesting user (IDOR prevention)
+async function getAndVerify(listingId, userId) {
   const result = await db.send(new GetCommand({ TableName: TABLE, Key: { listingId } }));
-
-  if (!result.Item) return respond(404, { error: 'Listing not found' });
-
-  // IDOR check: confirm the listing belongs to the requesting user
-  if (result.Item.userId !== userId) return respond(403, { error: 'Forbidden' });
-
-  return respond(200, result.Item);
+  if (!result.Item) return { error: 'Listing not found', status: 404 };
+  if (result.Item.userId !== userId) return { error: 'Forbidden', status: 403 };
+  return result.Item;
 }
 
-async function updateListing(userId, listingId, body) {
-  // Verify ownership before touching the record
-  const existing = await db.send(new GetCommand({ TableName: TABLE, Key: { listingId } }));
-
-  if (!existing.Item) return respond(404, { error: 'Listing not found' });
-  if (existing.Item.userId !== userId) return respond(403, { error: 'Forbidden' });
-
-  // Build UpdateExpression dynamically — only allow fields in UPDATABLE_FIELDS
-  const updates = {};
-  for (const field of UPDATABLE_FIELDS) {
-    if (body[field] !== undefined) updates[field] = body[field];
-  }
-
-  if (Object.keys(updates).length === 0) {
-    return respond(400, { error: 'No valid fields to update' });
-  }
-
-  updates.updatedAt = new Date().toISOString();
-
-  const setExpression   = Object.keys(updates).map(k => `#${k} = :${k}`).join(', ');
-  const expressionNames = Object.fromEntries(Object.keys(updates).map(k => [`#${k}`, k]));
-  const expressionValues = Object.fromEntries(Object.keys(updates).map(k => [`:${k}`, updates[k]]));
-
-  await db.send(new UpdateCommand({
-    TableName: TABLE,
-    Key: { listingId },
-    UpdateExpression: `SET ${setExpression}`,
-    ExpressionAttributeNames: expressionNames,
-    ExpressionAttributeValues: expressionValues,
-  }));
-
-  return respond(200, { message: 'Listing updated' });
-}
-
-async function deleteListing(userId, listingId) {
-  // Verify ownership before deleting
-  const existing = await db.send(new GetCommand({ TableName: TABLE, Key: { listingId } }));
-
-  if (!existing.Item) return respond(404, { error: 'Listing not found' });
-  if (existing.Item.userId !== userId) return respond(403, { error: 'Forbidden' });
-
-  await db.send(new DeleteCommand({ TableName: TABLE, Key: { listingId } }));
-
-  return respond(200, { message: 'Listing deleted' });
-}
-
-// ─── Response helper ──────────────────────────────────────────────────────────
-
-function respond(statusCode, body) {
+function response(statusCode, body) {
   return {
     statusCode,
     headers: {

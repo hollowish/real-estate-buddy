@@ -10,10 +10,10 @@ export default function AnalysisPanel({ analysis }) {
     <div className="mt-4 space-y-3">
       {pros.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-green-700 mb-1">Pros</h4>
+          <h4 className="text-sm font-semibold text-green-400 mb-1">Pros</h4>
           <ul className="space-y-1">
             {pros.map((pro, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+              <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
                 <span className="text-green-500 mt-0.5">✓</span>
                 {pro}
               </li>
@@ -24,10 +24,10 @@ export default function AnalysisPanel({ analysis }) {
 
       {cons.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-red-700 mb-1">Cons</h4>
+          <h4 className="text-sm font-semibold text-red-400 mb-1">Cons</h4>
           <ul className="space-y-1">
             {cons.map((con, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+              <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
                 <span className="text-red-400 mt-0.5">✗</span>
                 {con}
               </li>
@@ -38,8 +38,8 @@ export default function AnalysisPanel({ analysis }) {
 
       {summary && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-700 mb-1">Summary</h4>
-          <p className="text-sm text-gray-600 leading-relaxed">{summary}</p>
+          <h4 className="text-sm font-semibold text-gray-300 mb-1">Summary</h4>
+          <p className="text-sm text-gray-400 leading-relaxed">{summary}</p>
         </div>
       )}
     </div>

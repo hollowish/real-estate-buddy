@@ -16,7 +16,7 @@ on:
 
 jobs:
   deploy-ai:
-    if: contains(github.event.head_commit.modified, 'backend/ai/') || contains(github.event.head_commit.added, 'backend/ai/')
+    if: contains(toJson(github.event.head_commit.modified), 'backend/ai/') || contains(toJson(github.event.head_commit.added), 'backend/ai/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,7 +49,7 @@ jobs:
             --region us-west-2
 
   deploy-auth:
-    if: contains(github.event.head_commit.modified, 'backend/auth/handler.mjs') || contains(github.event.head_commit.added, 'backend/auth/handler.mjs')
+    if: contains(toJson(github.event.head_commit.modified), 'backend/auth/') || contains(toJson(github.event.head_commit.added), 'backend/auth/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -78,7 +78,7 @@ jobs:
             --region us-west-2
 
   deploy-listings:
-    if: contains(github.event.head_commit.modified, 'backend/listings/') || contains(github.event.head_commit.added, 'backend/listings/')
+    if: contains(toJson(github.event.head_commit.modified), 'backend/listings/') || contains(toJson(github.event.head_commit.added), 'backend/listings/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -96,7 +96,7 @@ jobs:
           python3 -c "
           import zipfile
           with zipfile.ZipFile('/tmp/listings.zip', 'w', zipfile.ZIP_DEFLATED) as z:
-              z.write('handler.mjs')
+              z.write('handler.js')
           "
           aws lambda update-function-code \
             --function-name reb-listings-handler \
