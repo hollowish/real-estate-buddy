@@ -3,7 +3,7 @@ import { signIn, signOut, confirmSignIn } from 'aws-amplify/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
-const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
+const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
 
 export default function LoginPage() {
   const [step, setStep] = useState('credentials');
@@ -54,7 +54,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
       <div className="bg-gray-800 rounded-xl shadow-xl shadow-gray-900/50 p-8 w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-gray-100 mb-1">HomeScore AI</h1>
+        <h1 className="text-2xl font-bold text-gray-100 mb-3">HomeScore AI</h1>
 
         {step === 'credentials' && (
           <>
@@ -75,13 +75,13 @@ export default function LoginPage() {
               />
               <button
                 onClick={handleCredentials} disabled={loading}
-                className="w-full py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
+                className="w-full py-3 rounded-lg bg-indigo-600 text-white text-sm font-medium
                            hover:bg-indigo-700 disabled:opacity-50 transition-colors"
               >
                 {loading ? 'Signing in…' : 'Sign In'}
               </button>
             </div>
-            <p className="text-center text-sm text-gray-400 mt-5">
+            <p className="text-center text-sm text-gray-400 mt-6">
               No account?{' '}
               <Link to="/signup" className="text-indigo-400 hover:underline font-medium">
                 Sign up
