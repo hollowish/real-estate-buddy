@@ -3,7 +3,7 @@ import { signIn, signOut, confirmSignIn } from 'aws-amplify/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
-const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
+const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
 
 export default function LoginPage() {
   const [step, setStep] = useState('credentials');
@@ -53,14 +53,14 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
-      <div className="bg-gray-800 rounded-xl shadow-xl shadow-gray-900/50 p-8 w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-gray-100 mb-3">HomeScore AI</h1>
+      <div className="bg-gray-800 rounded-xl shadow-xl shadow-gray-900/50 p-10 w-full max-w-[440px]">
+        <h1 className="text-2xl font-bold text-gray-100 mb-4">HomeScore AI</h1>
 
         {step === 'credentials' && (
           <>
             <p className="text-sm text-gray-400 mb-6">Sign in to your account</p>
             {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
-            <div className="space-y-4">
+            <div className="space-y-5">
               <input
                 type="email" placeholder="Email" value={email}
                 onChange={e => setEmail(e.target.value)}
@@ -75,13 +75,13 @@ export default function LoginPage() {
               />
               <button
                 onClick={handleCredentials} disabled={loading}
-                className="w-full py-3 rounded-lg bg-indigo-600 text-white text-sm font-medium
+                className="w-full py-3.5 rounded-lg bg-indigo-600 text-white text-sm font-medium
                            hover:bg-indigo-700 disabled:opacity-50 transition-colors"
               >
                 {loading ? 'Signing in…' : 'Sign In'}
               </button>
             </div>
-            <p className="text-center text-sm text-gray-400 mt-6">
+            <p className="text-center text-sm text-gray-400 mt-8">
               No account?{' '}
               <Link to="/signup" className="text-indigo-400 hover:underline font-medium">
                 Sign up
@@ -94,7 +94,7 @@ export default function LoginPage() {
           <>
             <p className="text-sm text-gray-400 mb-6">Enter your 6-digit authenticator code</p>
             {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
-            <div className="space-y-4">
+            <div className="space-y-5">
               <input
                 ref={mfaRef}
                 type="text" placeholder="6-digit code" value={mfaCode} maxLength={6}
@@ -105,7 +105,7 @@ export default function LoginPage() {
               />
               <button
                 onClick={handleMFA} disabled={loading}
-                className="w-full py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
+                className="w-full py-3.5 rounded-lg bg-indigo-600 text-white text-sm font-medium
                            hover:bg-indigo-700 disabled:opacity-50 transition-colors"
               >
                 {loading ? 'Verifying…' : 'Verify'}
