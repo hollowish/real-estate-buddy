@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { signIn, confirmSignIn } from 'aws-amplify/auth';
+import { signIn, signOut, confirmSignIn } from 'aws-amplify/auth';
 import { Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
@@ -24,6 +24,8 @@ export default function LoginPage() {
   const handleCredentials = async () => {
     setError(''); setLoading(true);
     try {
+      // Clear any stale session left over from the signup flow
+      try { await signOut(); } catch {}
       const result = await signIn({ username: email, password });
       if (result.nextStep.signInStep === 'CONFIRM_SIGN_IN_WITH_TOTP_CODE') {
         setStep('mfa');

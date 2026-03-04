@@ -103,10 +103,10 @@ export default function SignupPage() {
             <input
               ref={codeRef}
               type="text" placeholder="Verification code" value={code}
-              inputMode="numeric"
+              autoComplete="one-time-code"
               onChange={e => setCode(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleConfirmEmail()}
-              className={inputClass + ' text-center text-lg tracking-widest'}
+              className={inputClass + ' text-center text-lg'}
             />
             <button onClick={handleConfirmEmail} disabled={loading}
               className="w-full py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
