@@ -39,7 +39,7 @@ exports.handler = async (event) => {
   if (!userId) return response(401, { error: 'Unauthorized' });
 
   const method = event.httpMethod;
-  const listingId = event.pathParameters?.id;
+  const listingId = event.pathParameters?.proxy || event.pathParameters?.id;
   const body = event.body ? JSON.parse(event.body) : {};
 
   try {
