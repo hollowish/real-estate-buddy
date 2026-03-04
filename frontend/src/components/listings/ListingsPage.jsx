@@ -31,7 +31,8 @@ export default function ListingsPage() {
   if (error)   return <div className="p-8 text-center text-red-400">{error}</div>;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-[1100px] mx-auto px-4 md:px-8 py-8">
+
       {user && (
         <p className="text-sm text-gray-400 mb-6">
           Welcome back, <span className="text-gray-200 font-medium">{displayName}</span>
@@ -59,7 +60,7 @@ export default function ListingsPage() {
           </button>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-5 sm:grid-cols-2">
           {listings.map(listing => (
             <ListingCard key={listing.listingId} listing={listing} />
           ))}
@@ -75,14 +76,15 @@ function ListingCard({ listing }) {
   return (
     <Link
       to={`/listings/${listingId}`}
-      className="block rounded-xl border border-gray-700 bg-gray-800 p-5 hover:border-gray-600 hover:shadow-lg hover:shadow-gray-900/50 transition-all"
+      className="block rounded-xl border border-gray-700 bg-gray-800 p-6 hover:border-gray-600 hover:shadow-lg hover:shadow-gray-900/50 transition-all"
     >
       {/* Photo placeholder */}
-      <div className="w-full h-36 rounded-lg bg-gray-700 flex items-center justify-center mb-4">
+      <div className="w-full h-36 rounded-lg bg-gray-700 flex items-center justify-center mb-5">
         <span className="text-5xl">🏠</span>
       </div>
-      <h2 className="font-semibold text-gray-100 text-sm leading-snug mb-1 truncate">{address}</h2>
-      <p className="text-indigo-400 font-bold text-lg mb-3">${price?.toLocaleString()}</p>
+      <h2 className="font-semibold text-gray-100 text-sm leading-snug mb-2 truncate">{address}</h2>
+      <p className="text-indigo-400 font-bold text-lg mb-4">${price?.toLocaleString()}</p>
+
       <div className="flex items-center justify-between">
         <StarDisplay rating={userRating} />
         {aiScore != null ? (
