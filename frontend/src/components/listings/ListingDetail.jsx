@@ -48,7 +48,7 @@ export default function ListingDetail() {
   } = listing;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-[1100px] mx-auto px-4 md:px-8 py-8">
 
       {/* Back */}
       <Link to="/listings" className="text-sm text-indigo-400 hover:underline mb-4 inline-block">

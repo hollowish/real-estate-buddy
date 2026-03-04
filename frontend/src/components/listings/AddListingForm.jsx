@@ -61,10 +61,10 @@ export default function AddListingForm() {
     }
   }
 
-  const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
+  const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-[1100px] mx-auto px-4 md:px-8 py-8">
       <h1 className="text-2xl font-bold text-gray-100 mb-6">Add Listing</h1>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -148,7 +148,7 @@ export default function AddListingForm() {
           <button
             type="submit"
             disabled={submitting}
-            className="px-5 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
+            className="px-5 py-3.5 rounded-lg bg-indigo-600 text-white text-sm font-medium
                        hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {submitting ? 'Saving…' : 'Add Listing'}
@@ -156,7 +156,7 @@ export default function AddListingForm() {
           <button
             type="button"
             onClick={() => navigate('/listings')}
-            className="px-5 py-2 rounded-lg border border-gray-600 text-gray-300 text-sm font-medium
+            className="px-5 py-3.5 rounded-lg border border-gray-600 text-gray-300 text-sm font-medium
                        hover:bg-gray-700 transition-colors"
           >
             Cancel

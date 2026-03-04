@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../utils/api.js';
 
-const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
+const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
 
 export default function ProfilePage() {
   const [form, setForm] = useState({
@@ -82,7 +82,7 @@ export default function ProfilePage() {
   if (loading) return <div className="p-8 text-center text-gray-500">Loading…</div>;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-[1100px] mx-auto px-4 md:px-8 py-8">
       <h1 className="text-2xl font-bold text-gray-100 mb-2">My Profile</h1>
       <p className="text-sm text-gray-400 mb-6">
         Set your home-buying preferences so the AI can score listings for you personally.
@@ -148,7 +148,7 @@ export default function ProfilePage() {
           <button
             type="submit"
             disabled={saving}
-            className="px-5 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
+            className="px-5 py-3.5 rounded-lg bg-indigo-600 text-white text-sm font-medium
                        hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {saving ? 'Saving…' : 'Save Preferences'}
