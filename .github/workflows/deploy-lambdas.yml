@@ -96,7 +96,7 @@ jobs:
           python3 -c "
           import zipfile
           with zipfile.ZipFile('/tmp/listings.zip', 'w', zipfile.ZIP_DEFLATED) as z:
-              z.write('handler.mjs')
+              z.write('handler.js')
           "
           aws lambda update-function-code \
             --function-name reb-listings-handler \
