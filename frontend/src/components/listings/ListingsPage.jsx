@@ -1,5 +1,4 @@
 // Student B — Shows all listings for the current user as cards
-
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../utils/api.js';
@@ -11,6 +10,11 @@ export default function ListingsPage() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Resolve a human-readable display name from the Amplify user object.
+  // getCurrentUser() returns { username (sub/UUID), signInDetails: { loginId } }
+  // loginId holds the email / username used at sign-in, which is more readable.
+  const displayName = user?.signInDetails?.loginId || user?.username;
 
   useEffect(() => {
     api.get('/api/listings')
@@ -28,19 +32,17 @@ export default function ListingsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-
       {user && (
         <p className="text-sm text-gray-400 mb-6">
-          Welcome back, <span className="text-gray-200 font-medium">{user.username}</span>
+          Welcome back, <span className="text-gray-200 font-medium">{displayName}</span>
         </p>
       )}
-
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-100">My Listings</h1>
         <button
           onClick={() => navigate('/listings/new')}
           className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
-                     hover:bg-indigo-700 transition-colors"
+            hover:bg-indigo-700 transition-colors"
         >
           + Add Listing
         </button>
@@ -63,16 +65,13 @@ export default function ListingsPage() {
           ))}
         </div>
       )}
-
     </div>
   );
 }
 
-// ─── Listing Card ─────────────────────────────────────────────────────────────
-
+// ─── Listing Card ────────────────────────────────────────────────────────────────────────────────
 function ListingCard({ listing }) {
   const { listingId, address, price, userRating, aiScore } = listing;
-
   return (
     <Link
       to={`/listings/${listingId}`}
@@ -82,10 +81,8 @@ function ListingCard({ listing }) {
       <div className="w-full h-36 rounded-lg bg-gray-700 flex items-center justify-center mb-4">
         <span className="text-5xl">🏠</span>
       </div>
-
       <h2 className="font-semibold text-gray-100 text-sm leading-snug mb-1 truncate">{address}</h2>
       <p className="text-indigo-400 font-bold text-lg mb-3">${price?.toLocaleString()}</p>
-
       <div className="flex items-center justify-between">
         <StarDisplay rating={userRating} />
         {aiScore != null ? (
@@ -100,8 +97,7 @@ function ListingCard({ listing }) {
   );
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
+// ─── Helpers ────────────────────────────────────────────────────────────────────────────────────
 function StarDisplay({ rating }) {
   if (!rating) return <span className="text-xs text-gray-600">No rating</span>;
   return (
