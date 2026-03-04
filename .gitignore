@@ -1,12 +1,15 @@
+# Terraform
+.terraform/
+*.tfvars
+
 # Dependencies
 node_modules/
-package-lock.json
 
 # Build output
 frontend/dist/
 frontend/build/
 
-# Environment & secrets
+# Environment & secrets — never commit these
 .env
 .env.local
 .env.production
