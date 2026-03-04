@@ -20,7 +20,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-800 border-b border-gray-700 shadow-lg shadow-gray-900/40">
-      <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-[1100px] mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
         <Link to="/listings" className="text-lg font-bold text-indigo-400 tracking-tight">
           HomeScore AI
         </Link>

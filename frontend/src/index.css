@@ -104,11 +104,9 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.025em;
 }
 
-h1 { font-size: clamp(1.75rem, 4vw, 3rem);   font-weight: 800; }
-h2 { font-size: clamp(1.35rem, 3vw, 2.1rem); }
-h3 { font-size: clamp(1.1rem,  2vw, 1.4rem); }
-h4 { font-size: 1.1rem; }
-h5 { font-size: 0.95rem; letter-spacing: 0.04em; text-transform: uppercase; }
+/* Font sizes removed — Tailwind utility classes (text-2xl, text-3xl, etc.)
+   control heading sizes in components. */
+h1 { font-weight: 800; }
 
 p {
   color: var(--text-secondary);
@@ -240,12 +238,7 @@ button:focus-visible {
 /* Form Elements */
 label {
   display: block;
-  font-size: 0.78rem;
-  font-weight: 600;
   color: var(--text-secondary);
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
 input,

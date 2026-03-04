@@ -122,7 +122,7 @@ export default function AddListingForm() {
         </div>
 
         {/* Photo Upload */}
-        <div>
+        <div className="mt-4">
           <label className="block text-sm font-medium text-gray-300 mb-1">
             Photo <span className="text-gray-500 font-normal">(optional)</span>
           </label>
@@ -144,7 +144,7 @@ export default function AddListingForm() {
         {error && <p className="text-sm text-red-400">{error}</p>}
 
         {/* Actions */}
-        <div className="flex gap-3 pt-2">
+        <div className="flex gap-3 mt-8 pt-2">
           <button
             type="submit"
             disabled={submitting}
@@ -175,7 +175,7 @@ function StarRating({ value, onChange }) {
   const display = hovered ?? value;
 
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-3 py-2">
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
@@ -183,7 +183,7 @@ function StarRating({ value, onChange }) {
           onClick={() => onChange(star)}
           onMouseEnter={() => setHovered(star)}
           onMouseLeave={() => setHovered(null)}
-          className="text-2xl leading-none focus:outline-none"
+          className="text-4xl leading-none focus:outline-none"
           aria-label={`${star} star${star !== 1 ? 's' : ''}`}
         >
           <span className={star <= display ? 'text-yellow-400' : 'text-gray-600'}>★</span>

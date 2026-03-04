@@ -31,10 +31,10 @@ export default function ListingsPage() {
   if (error)   return <div className="p-8 text-center text-red-400">{error}</div>;
 
   return (
-    <div className="max-w-[1100px] mx-auto px-4 md:px-8 py-8">
+    <div className="max-w-[1100px] mx-auto px-4 md:px-8 pt-2 py-8">
 
       {user && (
-        <p className="text-sm text-gray-400 mb-6">
+        <p className="text-sm text-gray-400 mb-1">
           Welcome back, <span className="text-gray-200 font-medium">{displayName}</span>
         </p>
       )}
