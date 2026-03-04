@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { signIn, signOut, confirmSignIn } from 'aws-amplify/auth';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
 const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
@@ -13,6 +13,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
   const mfaRef = useRef(null);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function LoginPage() {
       const result = await confirmSignIn({ challengeResponse: mfaCode });
       if (result.isSignedIn) {
         await login();
-        window.location.href = '/';
+        navigate('/listings', { replace: true });
       }
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }

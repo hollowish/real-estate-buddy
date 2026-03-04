@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../utils/api.js';
+import { useAuth } from '../../auth/AuthContext.jsx';
 
 export default function ListingsPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,6 +28,12 @@ export default function ListingsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+
+      {user && (
+        <p className="text-sm text-gray-400 mb-6">
+          Welcome back, <span className="text-gray-200 font-medium">{user.username}</span>
+        </p>
+      )}
 
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-100">My Listings</h1>
