@@ -193,7 +193,7 @@ const S = {
     justifyContent: 'center',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    padding: '6rem 1.5rem 3rem',
+    padding: '6rem 2rem 3rem',
     textAlign: 'center',
     overflow: 'hidden',
   },
@@ -319,12 +319,13 @@ const S = {
   },
 
   section: {
-    padding: '5rem 1.5rem',
+    padding: '5rem 2rem',
     background: 'var(--bg-secondary)',
   },
   container: {
-    maxWidth: 1100,
+    maxWidth: 896,
     margin: '0 auto',
+    width: '100%',
   },
   sectionTitle: {
     textAlign: 'center',
@@ -341,7 +342,7 @@ const S = {
   },
   featureGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
     gap: '1.5rem',
   },
   featureCard: {
@@ -351,6 +352,8 @@ const S = {
     padding: '2rem 1.5rem',
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
     gap: '0.75rem',
   },
   featureIcon: {
@@ -371,7 +374,7 @@ const S = {
   },
 
   aboutSection: {
-    padding: '5rem 1.5rem 6rem',
+    padding: '5rem 2rem 6rem',
     background: 'var(--bg-primary)',
     textAlign: 'center',
   },
