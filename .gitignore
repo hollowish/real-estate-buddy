@@ -38,3 +38,7 @@ Thumbs.db
 # Logs
 *.log
 .claude/
+
+# Project documents (Word docs — keep local only)
+*.docx
+*.doc

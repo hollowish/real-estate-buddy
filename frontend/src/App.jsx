@@ -1,11 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthContext'
 import ProtectedRoute from './auth/ProtectedRoute'
+import Layout from './components/shared/Layout'
 import LoginPage from './auth/LoginPage'
 import SignupPage from './auth/SignupPage'
 import ListingsPage from './components/listings/ListingsPage'
 import ListingDetail from './components/listings/ListingDetail'
 import AddListingForm from './components/listings/AddListingForm'
+import ProfilePage from './components/auth/ProfilePage'
 
 export default function App() {
   return (
@@ -16,13 +18,16 @@ export default function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/" element={<Navigate to="/listings" replace />} />
           <Route path="/listings" element={
-            <ProtectedRoute><ListingsPage /></ProtectedRoute>
+            <ProtectedRoute><Layout><ListingsPage /></Layout></ProtectedRoute>
           } />
           <Route path="/listings/new" element={
-            <ProtectedRoute><AddListingForm /></ProtectedRoute>
+            <ProtectedRoute><Layout><AddListingForm /></Layout></ProtectedRoute>
           } />
           <Route path="/listings/:id" element={
-            <ProtectedRoute><ListingDetail /></ProtectedRoute>
+            <ProtectedRoute><Layout><ListingDetail /></Layout></ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute><Layout><ProfilePage /></Layout></ProtectedRoute>
           } />
           <Route path="*" element={<Navigate to="/listings" replace />} />
         </Routes>

@@ -1,6 +1,11 @@
-// Student D — Shared page layout wrapper (Navbar + content area)
-// TODO: Implement
+// Shared page layout — Navbar + content area
+import Navbar from './Navbar';
 
 export default function Layout({ children }) {
-  return <>{children}</>;
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <main>{children}</main>
+    </div>
+  );
 }
