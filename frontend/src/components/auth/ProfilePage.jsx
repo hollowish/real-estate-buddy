@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../utils/api.js';
 
-const inputClass = 'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
+const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
 
 export default function ProfilePage() {
   const [form, setForm] = useState({
@@ -79,45 +79,45 @@ export default function ProfilePage() {
     }
   }
 
-  if (loading) return <div className="p-8 text-center text-gray-400">Loading…</div>;
+  if (loading) return <div className="p-8 text-center text-gray-500">Loading…</div>;
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">My Profile</h1>
-      <p className="text-sm text-gray-500 mb-6">
+      <h1 className="text-2xl font-bold text-gray-100 mb-2">My Profile</h1>
+      <p className="text-sm text-gray-400 mb-6">
         Set your home-buying preferences so the AI can score listings for you personally.
       </p>
 
       <form onSubmit={handleSave} className="space-y-5">
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Display Name</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1">Display Name</label>
           <input type="text" value={form.displayName} onChange={set('displayName')}
             placeholder="Your name" className={inputClass} />
         </div>
 
-        <hr className="border-gray-200" />
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+        <hr className="border-gray-700" />
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
           AI Scoring Preferences
         </p>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Min Bedrooms</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1">Min Bedrooms</label>
             <input type="number" min="0" value={form.minBedrooms} onChange={set('minBedrooms')}
               placeholder="e.g. 3" className={inputClass} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Max Price (USD)</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1">Max Price (USD)</label>
             <input type="number" min="0" step="10000" value={form.maxPrice}
               onChange={set('maxPrice')} placeholder="e.g. 800000" className={inputClass} />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-300 mb-1">
             Must-Haves{' '}
-            <span className="text-gray-400 font-normal">(comma-separated)</span>
+            <span className="text-gray-500 font-normal">(comma-separated)</span>
           </label>
           <input type="text" value={form.mustHave} onChange={set('mustHave')}
             placeholder="e.g. garage, backyard, good schools"
@@ -125,9 +125,9 @@ export default function ProfilePage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-300 mb-1">
             Deal-Breakers{' '}
-            <span className="text-gray-400 font-normal">(comma-separated)</span>
+            <span className="text-gray-500 font-normal">(comma-separated)</span>
           </label>
           <input type="text" value={form.dealBreakers} onChange={set('dealBreakers')}
             placeholder="e.g. flood zone, HOA over $500, busy street"
@@ -135,14 +135,14 @@ export default function ProfilePage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Commute Address</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1">Commute Address</label>
           <input type="text" value={form.commuteAddress} onChange={set('commuteAddress')}
             placeholder="e.g. 123 Work St, San Francisco, CA"
             className={inputClass} />
         </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        {saved && <p className="text-sm text-green-600">Preferences saved!</p>}
+        {error && <p className="text-sm text-red-400">{error}</p>}
+        {saved && <p className="text-sm text-green-400">Preferences saved!</p>}
 
         <div className="pt-2">
           <button

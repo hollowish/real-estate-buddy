@@ -11,15 +11,15 @@ import AnalysisPanel from './AnalysisPanel.jsx';
 // ─── Score color helper ───────────────────────────────────────────────────────
 
 function scoreColor(score) {
-  if (score >= 70) return 'text-green-600';
-  if (score >= 40) return 'text-yellow-500';
-  return 'text-red-500';
+  if (score >= 70) return 'text-green-400';
+  if (score >= 40) return 'text-yellow-400';
+  return 'text-red-400';
 }
 
 function scoreBg(score) {
-  if (score >= 70) return 'bg-green-50 border-green-200';
-  if (score >= 40) return 'bg-yellow-50 border-yellow-200';
-  return 'bg-red-50 border-red-200';
+  if (score >= 70) return 'bg-green-900/30 border-green-700';
+  if (score >= 40) return 'bg-yellow-900/30 border-yellow-700';
+  return 'bg-red-900/30 border-red-700';
 }
 
 function scoreLabel(score) {
@@ -64,14 +64,14 @@ export default function ScoreDisplay({ listingId, score: initialScore, analysis:
           <div className="flex items-center gap-4">
             <span className={`text-5xl font-bold ${scoreColor(score)}`}>{score}</span>
             <div>
-              <div className="text-sm font-medium text-gray-500 uppercase tracking-wide">AI Match Score</div>
+              <div className="text-sm font-medium text-gray-400 uppercase tracking-wide">AI Match Score</div>
               <div className={`text-lg font-semibold ${scoreColor(score)}`}>{scoreLabel(score)}</div>
             </div>
           </div>
           {analysis && <AnalysisPanel analysis={analysis} />}
         </div>
       ) : (
-        <p className="text-sm text-gray-500 mb-3">No AI score yet for this listing.</p>
+        <p className="text-sm text-gray-400 mb-3">No AI score yet for this listing.</p>
       )}
 
       {/* Action button */}
@@ -93,7 +93,7 @@ export default function ScoreDisplay({ listingId, score: initialScore, analysis:
 
       {/* Error */}
       {error && (
-        <p className="mt-2 text-sm text-red-600">{error}</p>
+        <p className="mt-2 text-sm text-red-400">{error}</p>
       )}
     </div>
   );
