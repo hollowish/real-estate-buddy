@@ -12,9 +12,13 @@ export default function LoginPage() {
   const [mfaCode, setMfaCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, token } = useAuth();
   const navigate = useNavigate();
   const mfaRef = useRef(null);
+
+  useEffect(() => {
+    if (token) navigate('/listings', { replace: true });
+  }, [token]);
 
   useEffect(() => {
     if (step === 'mfa') {
@@ -41,7 +45,6 @@ export default function LoginPage() {
       const result = await confirmSignIn({ challengeResponse: mfaCode });
       if (result.isSignedIn) {
         await login();
-        navigate('/listings', { replace: true });
       }
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }

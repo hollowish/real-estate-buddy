@@ -14,7 +14,7 @@ async function request(path, options = {}) {
 
   try {
     const session = await fetchAuthSession();
-    const token = session.tokens?.accessToken?.toString();
+    const token = session.tokens?.idToken?.toString();
     if (token) headers['Authorization'] = `Bearer ${token}`;
   } catch {
     // Not signed in — let the request go through; API will return 401/403
