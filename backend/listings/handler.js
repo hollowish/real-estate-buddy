@@ -31,7 +31,8 @@ const db = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const s3 = new S3Client({ region: process.env.AWS_REGION || 'us-west-2' });
 
 const TABLE = process.env.LISTINGS_TABLE || 'reb-listings';
-const BUCKET = process.env.PHOTOS_BUCKET || 'reb-photos-902917582511';
+const BUCKET = process.env.PHOTOS_BUCKET;
+if (!BUCKET) throw new Error('PHOTOS_BUCKET environment variable not set');
 
 exports.handler = async (event) => {
   // Extract userId from JWT claims — never trust request body for identity

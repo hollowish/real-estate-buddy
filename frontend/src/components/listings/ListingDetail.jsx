@@ -64,7 +64,7 @@ export default function ListingDetail() {
         <div className="flex gap-2 shrink-0">
           <Link
             to={`/listings/${id}/edit`}
-            className="px-4 py-2 rounded-lg border border-gray-600 text-gray-300 text-sm font-medium
+            className="inline-flex items-center px-5 py-2 rounded-lg border border-gray-600 text-gray-300 text-sm font-medium
                        hover:bg-gray-700 transition-colors"
           >
             Edit
