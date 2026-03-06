@@ -43,7 +43,7 @@ export default function ListingDetail() {
 
   const {
     address, price, bedrooms, bathrooms, sqft,
-    mlsNumber, userNotes, userRating, photos,
+    mlsNumber, userNotes, userRating, photos, photoUrls,
     aiScore, aiAnalysis, createdAt,
   } = listing;
 
@@ -106,16 +106,15 @@ export default function ListingDetail() {
       {/* Photos */}
       <div className="mb-8">
         <p className="text-sm font-medium text-[var(--text-secondary)] mb-2">Photos</p>
-        {photos && photos.length > 0 ? (
+        {photoUrls && photoUrls.length > 0 ? (
           <div className="grid grid-cols-2 gap-3">
-            {photos.map((key, i) => (
-              <div
+            {photoUrls.map((url, i) => (
+              <img
                 key={i}
-                className="h-40 rounded-[var(--radius-md)] bg-[var(--bg-navy)] flex flex-col items-center justify-center text-[var(--text-muted)]"
-              >
-                <span className="text-3xl mb-2">🖼️</span>
-                <span className="text-xs px-2 text-center break-all">{key}</span>
-              </div>
+                src={url}
+                alt={`${address} photo ${i + 1}`}
+                className="h-40 w-full object-cover rounded-[var(--radius-md)]"
+              />
             ))}
           </div>
         ) : (
