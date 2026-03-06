@@ -71,6 +71,10 @@ export default function HomePage() {
           <div style={S.taglinePill}>AI-Powered Home Analysis</div>
 
           <h1 style={S.heroTitle}>
+            HomeScore
+          </h1>
+
+          <h1 style={S.heroTitle}>
             Rate it.{' '}
             <span style={{ color: 'var(--gold)' }}>Compare it.</span>
             {' '}Own it.
