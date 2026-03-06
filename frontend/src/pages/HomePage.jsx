@@ -82,7 +82,7 @@ export default function HomePage() {
 
           <p style={S.heroSubtitle}>
             Finding your perfect home is one of the biggest decisions of your life –
-            and it shouldn't feel overwhelming. RealEstateBuddy takes the guesswork
+            and it shouldn't feel overwhelming. HomeScore takes the guesswork
             out of home buying with AI-powered analysis that rates every property
             on a clear 1–10 scale.
           </p>
@@ -140,7 +140,7 @@ export default function HomePage() {
         <div style={{ ...S.container, maxWidth: 760 }}>
 
           <div style={S.goldDivider} />
-          <p style={S.aboutEyebrow}>About RealEstateBuddy</p>
+          <p style={S.aboutEyebrow}>About HomeScore</p>
 
           <h2 style={S.aboutTitle}>
             We built the tool we wished existed.
@@ -152,7 +152,7 @@ export default function HomePage() {
               and it shouldn't feel overwhelming.
             </p>
             <p>
-              RealEstateBuddy takes the guesswork out of home buying. Simply input
+              HomeScore takes the guesswork out of home buying. Simply input
               multiple property listings and let our AI-powered engine analyze each
               one across key factors like location, price, size, and value. Every
               listing gets rated on a scale of 1 to 10, giving you a clear,
@@ -160,7 +160,7 @@ export default function HomePage() {
             </p>
             <p>
               Whether you're a first-time buyer or an experienced investor,
-              RealEstateBuddy gives you the clarity and confidence to choose the
+              HomeScore gives you the clarity and confidence to choose the
               home that's right for you.
             </p>
           </div>
