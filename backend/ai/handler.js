@@ -181,6 +181,13 @@ ${listingDetails}
 BUYER PREFERENCES:
 ${prefDetails || 'No preferences provided.'}
 
+// Grounding rules added to fix hallucination of deal-breakers/must-haves — see Issue #24
+GROUNDING RULES — you MUST follow these:
+- Base ALL pros and cons strictly on information present in PROPERTY DETAILS above. Do not infer, assume, or speculate about features not explicitly stated.
+- Deal-breakers: Only flag a deal-breaker as a Con if the listing explicitly mentions that the deal-breaker applies (e.g. the Notes say "in flood zone"). If a deal-breaker is simply not mentioned in the listing, do NOT list it as a Con — omit it entirely.
+- Must-haves: Only flag a must-have as a Pro if the listing explicitly confirms the feature is present. If a must-have is not mentioned, do NOT list it as a Pro — omit it entirely.
+- If the listing data is sparse or missing key details, reflect that uncertainty in the summary (e.g. "Limited listing data makes a full evaluation difficult") rather than speculating about unknown features.
+
 Score this property from 1 to 100 based on how well it matches the buyer's preferences and represents good value. 100 is a perfect match; 1 is a terrible fit.
 
 Respond with ONLY a valid JSON object in this exact format — no markdown, no explanation:
