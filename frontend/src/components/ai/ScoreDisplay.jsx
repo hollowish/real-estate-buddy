@@ -11,15 +11,15 @@ import AnalysisPanel from './AnalysisPanel.jsx';
 // ─── Score color helper ───────────────────────────────────────────────────────
 
 function scoreColor(score) {
-  if (score >= 70) return 'text-green-400';
-  if (score >= 40) return 'text-yellow-400';
-  return 'text-red-400';
+  if (score >= 70) return 'text-[var(--success)]';
+  if (score >= 40) return 'text-[var(--gold)]';
+  return 'text-[var(--error)]';
 }
 
 function scoreBg(score) {
-  if (score >= 70) return 'bg-green-900/30 border-green-700';
-  if (score >= 40) return 'bg-yellow-900/30 border-yellow-700';
-  return 'bg-red-900/30 border-red-700';
+  if (score >= 70) return 'bg-[var(--success-muted)] border-[var(--success)]';
+  if (score >= 40) return 'bg-[var(--gold-muted)] border-[var(--gold)]';
+  return 'bg-[var(--error-muted)] border-[var(--error)]';
 }
 
 function scoreLabel(score) {
@@ -64,22 +64,21 @@ export default function ScoreDisplay({ listingId, score: initialScore, analysis:
           <div className="flex items-center gap-4">
             <span className={`text-5xl font-bold ${scoreColor(score)}`}>{score}</span>
             <div>
-              <div className="text-sm font-medium text-gray-400 uppercase tracking-wide">AI Match Score</div>
+              <div className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wide">AI Match Score</div>
               <div className={`text-lg font-semibold ${scoreColor(score)}`}>{scoreLabel(score)}</div>
             </div>
           </div>
           {analysis && <AnalysisPanel analysis={analysis} />}
         </div>
       ) : (
-        <p className="text-sm text-gray-400 mb-3">No AI score yet for this listing.</p>
+        <p className="text-sm text-[var(--text-muted)] mb-3">No AI score yet for this listing.</p>
       )}
 
       {/* Action button */}
       <button
         onClick={handleScore}
         disabled={loading}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium
-                   hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="btn-primary"
       >
         {loading ? (
           <>
@@ -93,7 +92,7 @@ export default function ScoreDisplay({ listingId, score: initialScore, analysis:
 
       {/* Error */}
       {error && (
-        <p className="mt-2 text-sm text-red-400">{error}</p>
+        <p className="mt-2 text-sm text-[var(--error)]">{error}</p>
       )}
     </div>
   );
@@ -101,7 +100,7 @@ export default function ScoreDisplay({ listingId, score: initialScore, analysis:
 
 function Spinner() {
   return (
-    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+    <svg className="animate-spin h-4 w-4 inline mr-2" viewBox="0 0 24 24" fill="none">
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
       <path className="opacity-75" fill="currentColor"
         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />

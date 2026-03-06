@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../utils/api.js';
 
-const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
-
 export default function ProfilePage() {
   const [form, setForm] = useState({
     displayName: '',
@@ -79,78 +77,70 @@ export default function ProfilePage() {
     }
   }
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading…</div>;
+  if (loading) return <div className="p-8 text-center text-[var(--text-muted)]">Loading…</div>;
 
   return (
-    <div className="max-w-[1100px] mx-auto px-4 md:px-8 py-8">
-      <h1 className="text-2xl font-bold text-gray-100 mb-2">My Profile</h1>
-      <p className="text-sm text-gray-400 mb-6">
+    <div>
+      <h1 className="text-3xl font-extrabold text-white mb-3">My Profile</h1>
+      <p className="text-sm text-[var(--text-secondary)] mb-8">
         Set your home-buying preferences so the AI can score listings for you personally.
       </p>
 
       <form onSubmit={handleSave} className="space-y-5">
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Display Name</label>
+          <label className="text-sm font-medium mb-1.5">Display Name</label>
           <input type="text" value={form.displayName} onChange={set('displayName')}
-            placeholder="Your name" className={inputClass} />
+            placeholder="Your name" />
         </div>
 
-        <hr className="border-gray-700" />
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <hr />
+        <p className="text-xs font-semibold text-[var(--gold)] uppercase tracking-wide">
           AI Scoring Preferences
         </p>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Min Bedrooms</label>
+            <label className="text-sm font-medium mb-1.5">Min Bedrooms</label>
             <input type="number" min="0" value={form.minBedrooms} onChange={set('minBedrooms')}
-              placeholder="e.g. 3" className={inputClass} />
+              placeholder="e.g. 3" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Max Price (USD)</label>
+            <label className="text-sm font-medium mb-1.5">Max Price (USD)</label>
             <input type="number" min="0" step="10000" value={form.maxPrice}
-              onChange={set('maxPrice')} placeholder="e.g. 800000" className={inputClass} />
+              onChange={set('maxPrice')} placeholder="e.g. 800000" />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">
+          <label className="text-sm font-medium mb-1.5">
             Must-Haves{' '}
-            <span className="text-gray-500 font-normal">(comma-separated)</span>
+            <span className="text-[var(--text-muted)] font-normal">(comma-separated)</span>
           </label>
           <input type="text" value={form.mustHave} onChange={set('mustHave')}
-            placeholder="e.g. garage, backyard, good schools"
-            className={inputClass} />
+            placeholder="e.g. garage, backyard, good schools" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">
+          <label className="text-sm font-medium mb-1.5">
             Deal-Breakers{' '}
-            <span className="text-gray-500 font-normal">(comma-separated)</span>
+            <span className="text-[var(--text-muted)] font-normal">(comma-separated)</span>
           </label>
           <input type="text" value={form.dealBreakers} onChange={set('dealBreakers')}
-            placeholder="e.g. flood zone, HOA over $500, busy street"
-            className={inputClass} />
+            placeholder="e.g. flood zone, HOA over $500, busy street" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Commute Address</label>
+          <label className="text-sm font-medium mb-1.5">Commute Address</label>
           <input type="text" value={form.commuteAddress} onChange={set('commuteAddress')}
-            placeholder="e.g. 123 Work St, San Francisco, CA"
-            className={inputClass} />
+            placeholder="e.g. 123 Work St, San Francisco, CA" />
         </div>
 
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        {saved && <p className="text-sm text-green-400">Preferences saved!</p>}
+        {error && <p className="text-sm text-[var(--error)]">{error}</p>}
+        {saved && <p className="text-sm text-[var(--success)]">Preferences saved!</p>}
 
-        <div className="pt-2">
-          <button
-            type="submit"
-            disabled={saving}
-            className="px-5 py-3.5 rounded-lg bg-indigo-600 text-white text-sm font-medium
-                       hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
+        <div className="pt-4">
+          <button type="submit" disabled={saving} className="btn-primary btn-lg">
             {saving ? 'Saving…' : 'Save Preferences'}
           </button>
         </div>

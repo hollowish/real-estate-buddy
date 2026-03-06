@@ -37,8 +37,8 @@ export default function ListingDetail() {
     }
   }
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading…</div>;
-  if (error)   return <div className="p-8 text-center text-red-400">{error}</div>;
+  if (loading) return <div className="p-8 text-center text-[var(--text-muted)]">Loading…</div>;
+  if (error)   return <div className="p-8 text-center text-[var(--error)]">{error}</div>;
   if (!listing) return null;
 
   const {
@@ -48,40 +48,29 @@ export default function ListingDetail() {
   } = listing;
 
   return (
-    <div className="max-w-[1100px] mx-auto px-4 md:px-8 py-8">
+    <div>
 
       {/* Back */}
-      <Link to="/listings" className="text-sm text-indigo-400 hover:underline mb-4 inline-block">
+      <Link to="/listings" className="text-sm mb-6 inline-block">
         ← My Listings
       </Link>
 
       {/* Header */}
-      <div className="flex items-start justify-between gap-4 mb-6">
+      <div className="flex items-start justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-100">{address}</h1>
-          <p className="text-indigo-400 font-bold text-xl mt-1">${price?.toLocaleString()}</p>
+          <h1 className="text-3xl font-extrabold text-white">{address}</h1>
+          <p className="text-[var(--gold)] font-bold text-2xl mt-1">${price?.toLocaleString()}</p>
         </div>
-        <div className="flex gap-2 shrink-0">
-          <Link
-            to={`/listings/${id}/edit`}
-            className="inline-flex items-center px-5 py-2 rounded-lg border border-gray-600 text-gray-300 text-sm font-medium
-                       hover:bg-gray-700 transition-colors"
-          >
-            Edit
-          </Link>
-          <button
-            onClick={handleDelete}
-            disabled={deleting}
-            className="px-4 py-2 rounded-lg bg-red-700 text-white text-sm font-medium
-                       hover:bg-red-600 disabled:opacity-50 transition-colors"
-          >
+        <div className="flex gap-3 shrink-0">
+          <Link to={`/listings/${id}/edit`} className="btn-ghost">Edit</Link>
+          <button onClick={handleDelete} disabled={deleting} className="btn-danger">
             {deleting ? 'Deleting…' : 'Delete'}
           </button>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-4 mb-8">
         <Stat label="Bedrooms"  value={bedrooms  ?? '—'} />
         <Stat label="Bathrooms" value={bathrooms ?? '—'} />
         <Stat label="Sq Ft"     value={sqft ? sqft.toLocaleString() : '—'} />
@@ -89,16 +78,16 @@ export default function ListingDetail() {
 
       {/* MLS */}
       {mlsNumber && (
-        <p className="text-sm text-gray-400 mb-4">
-          MLS: <span className="font-medium text-gray-200">{mlsNumber}</span>
+        <p className="text-sm text-[var(--text-secondary)] mb-4">
+          MLS: <span className="font-medium text-white">{mlsNumber}</span>
         </p>
       )}
 
       {/* User rating */}
       {userRating > 0 && (
-        <div className="mb-4">
-          <p className="text-sm font-medium text-gray-400 mb-1">Your Rating</p>
-          <span className="text-yellow-400 text-xl tracking-tight" aria-label={`${userRating} out of 5 stars`}>
+        <div className="mb-6">
+          <p className="text-sm font-medium text-[var(--text-secondary)] mb-1">Your Rating</p>
+          <span className="text-[var(--gold)] text-xl tracking-wider" aria-label={`${userRating} out of 5 stars`}>
             {'★'.repeat(userRating)}{'☆'.repeat(5 - userRating)}
           </span>
         </div>
@@ -106,23 +95,23 @@ export default function ListingDetail() {
 
       {/* Notes */}
       {userNotes && (
-        <div className="mb-6">
-          <p className="text-sm font-medium text-gray-400 mb-1">Notes</p>
-          <p className="text-sm text-gray-200 leading-relaxed bg-gray-700 rounded-lg px-4 py-3">
+        <div className="mb-8">
+          <p className="text-sm font-medium text-[var(--text-secondary)] mb-1">Notes</p>
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed bg-[var(--bg-navy)] rounded-[var(--radius-md)] px-5 py-4">
             {userNotes}
           </p>
         </div>
       )}
 
       {/* Photos */}
-      <div className="mb-6">
-        <p className="text-sm font-medium text-gray-400 mb-2">Photos</p>
+      <div className="mb-8">
+        <p className="text-sm font-medium text-[var(--text-secondary)] mb-2">Photos</p>
         {photos && photos.length > 0 ? (
           <div className="grid grid-cols-2 gap-3">
             {photos.map((key, i) => (
               <div
                 key={i}
-                className="h-40 rounded-lg bg-gray-700 flex flex-col items-center justify-center text-gray-500"
+                className="h-40 rounded-[var(--radius-md)] bg-[var(--bg-navy)] flex flex-col items-center justify-center text-[var(--text-muted)]"
               >
                 <span className="text-3xl mb-2">🖼️</span>
                 <span className="text-xs px-2 text-center break-all">{key}</span>
@@ -130,13 +119,13 @@ export default function ListingDetail() {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-gray-500">No photos uploaded.</p>
+          <p className="text-sm text-[var(--text-muted)]">No photos uploaded.</p>
         )}
       </div>
 
       {/* AI Score */}
-      <div className="border-t border-gray-700 pt-6">
-        <p className="text-sm font-medium text-gray-400 mb-1">AI Analysis</p>
+      <div className="border-t border-[var(--border)] pt-6">
+        <p className="text-sm font-medium text-[var(--text-secondary)] mb-1">AI Analysis</p>
         <ScoreDisplay
           listingId={id}
           score={aiScore}
@@ -145,7 +134,7 @@ export default function ListingDetail() {
       </div>
 
       {/* Metadata */}
-      <p className="mt-8 text-xs text-gray-600">
+      <p className="mt-8 text-xs text-[var(--text-muted)]">
         Added {new Date(createdAt).toLocaleDateString()}
       </p>
 
@@ -157,9 +146,9 @@ export default function ListingDetail() {
 
 function Stat({ label, value }) {
   return (
-    <div className="rounded-lg bg-gray-700 px-4 py-3 text-center">
-      <p className="text-xs text-gray-500 uppercase tracking-wide mb-0.5">{label}</p>
-      <p className="text-lg font-semibold text-gray-100">{value}</p>
+    <div className="rounded-[var(--radius-md)] bg-[var(--bg-navy)] px-5 py-4 text-center">
+      <p className="text-xs text-[var(--text-muted)] uppercase tracking-wide mb-1">{label}</p>
+      <p className="text-xl font-semibold text-white">{value}</p>
     </div>
   );
 }

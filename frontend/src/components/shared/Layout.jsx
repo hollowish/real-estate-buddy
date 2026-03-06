@@ -3,22 +3,10 @@ import Navbar from './Navbar';
 
 export default function Layout({ children }) {
   return (
-    <div style={{ minHeight: '100vh', background: '#111827' }}>
+    <div className="min-h-screen bg-[var(--bg-primary)]">
       <Navbar />
-      <main style={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        paddingTop: '2rem',
-        paddingBottom: '3rem',
-        boxSizing: 'border-box',
-      }}>
-        <div style={{
-          width: '100%',
-          maxWidth: '1100px',
-          padding: '0 2rem',
-          boxSizing: 'border-box',
-        }}>
+      <main className="w-full flex justify-center pt-8 pb-12">
+        <div className="page-container">
           {children}
         </div>
       </main>

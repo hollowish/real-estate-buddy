@@ -3,8 +3,6 @@ import { signIn, signOut, confirmSignIn } from 'aws-amplify/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
-const inputClass = 'w-full rounded-lg border border-gray-600 bg-gray-700 text-gray-100 placeholder-gray-500 px-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
-
 export default function LoginPage() {
   const [step, setStep] = useState('credentials');
   const [email, setEmail] = useState('');
@@ -52,48 +50,43 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
-      <div className="bg-gray-800 rounded-xl shadow-xl shadow-gray-900/50 p-10 w-full max-w-[440px]">
-        <h1 className="text-2xl font-bold text-gray-100 mb-4">HomeScore AI</h1>
+    <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center px-4">
+      <div className="card p-10 shadow-lg w-full max-w-[440px]">
+        <h1 className="text-3xl font-extrabold text-white mb-4">HomeScore AI</h1>
 
         {step === 'credentials' && (
           <>
-            <p className="text-sm text-gray-400 mb-6">Sign in to your account</p>
-            {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
+            <p className="text-sm text-[var(--text-secondary)] mb-6">Sign in to your account</p>
+            {error && <p className="text-sm text-[var(--error)] mb-4">{error}</p>}
             <div className="space-y-5">
               <input
                 type="email" placeholder="Email" value={email}
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleCredentials()}
-                className={inputClass}
               />
               <input
                 type="password" placeholder="Password" value={password}
                 onChange={e => setPassword(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleCredentials()}
-                className={inputClass}
               />
               <button
                 onClick={handleCredentials} disabled={loading}
-                className="w-full py-3.5 rounded-lg bg-indigo-600 text-white text-sm font-medium
-                           hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                className="btn-primary btn-lg w-full"
               >
                 {loading ? 'Signing in…' : 'Sign In'}
               </button>
             </div>
-            <p className="text-center text-sm text-gray-400 mt-8">
+            <p className="text-center text-sm text-[var(--text-secondary)] mt-8">
               No account?{' '}
-              <Link to="/signup" className="text-indigo-400 hover:underline font-medium">
-                Sign up
-              </Link>
+              <Link to="/signup" className="font-medium">Sign up</Link>
             </p>
           </>
         )}
 
         {step === 'mfa' && (
           <>
-            <p className="text-sm text-gray-400 mb-6">Enter your 6-digit authenticator code</p>
-            {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
+            <p className="text-sm text-[var(--text-secondary)] mb-6">Enter your 6-digit authenticator code</p>
+            {error && <p className="text-sm text-[var(--error)] mb-4">{error}</p>}
             <div className="space-y-5">
               <input
                 ref={mfaRef}
@@ -101,12 +94,11 @@ export default function LoginPage() {
                 inputMode="numeric"
                 onChange={e => setMfaCode(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleMFA()}
-                className={inputClass + ' text-center text-lg tracking-widest'}
+                className="text-center text-lg tracking-widest"
               />
               <button
                 onClick={handleMFA} disabled={loading}
-                className="w-full py-3.5 rounded-lg bg-indigo-600 text-white text-sm font-medium
-                           hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                className="btn-primary btn-lg w-full"
               >
                 {loading ? 'Verifying…' : 'Verify'}
               </button>
