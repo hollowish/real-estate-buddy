@@ -68,12 +68,19 @@ function ListingCard({ listing }) {
     <Link to={`/listings/${listingId}`} className="block" style={{ color: 'inherit', textDecoration: 'none' }}>
       <div className="card card-hover card-gold h-full overflow-hidden !p-0">
         {thumb ? (
-          <img src={thumb} alt={address} className="w-full h-40 object-cover" />
-        ) : (
-          <div className="w-full h-40 bg-[var(--bg-navy)] flex items-center justify-center">
-            <span className="text-4xl">🏠</span>
-          </div>
-        )}
+          <img
+            src={thumb}
+            alt={address}
+            className="w-full h-40 object-cover"
+            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+          />
+        ) : null}
+        <div
+          className="w-full h-40 bg-[var(--bg-navy)] flex items-center justify-center"
+          style={thumb ? { display: 'none' } : undefined}
+        >
+          <span className="text-4xl">🏠</span>
+        </div>
         <div className="p-6">
           <h3 className="text-lg font-semibold text-white truncate mb-1">{address}</h3>
           <p className="text-xl font-bold text-[var(--gold)] mb-4">

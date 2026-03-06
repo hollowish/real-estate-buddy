@@ -114,6 +114,7 @@ export default function ListingDetail() {
                 src={url}
                 alt={`${address} photo ${i + 1}`}
                 className="h-40 w-full object-cover rounded-[var(--radius-md)]"
+                onError={(e) => { e.target.style.display = 'none'; }}
               />
             ))}
           </div>
