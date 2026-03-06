@@ -11,6 +11,8 @@ export default function EditListingForm() {
     address: '', price: '', bedrooms: '', bathrooms: '',
     sqft: '', mlsNumber: '', userNotes: '', userRating: 0,
   });
+  const [existingPhotos, setExistingPhotos] = useState([]);
+  const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -32,6 +34,7 @@ export default function EditListingForm() {
           userNotes:  data.userNotes || '',
           userRating: data.userRating || 0,
         });
+        setExistingPhotos(data.photoUrls || []);
       })
       .catch(() => setError("Listing not found or you don't have access."))
       .finally(() => setLoading(false));
@@ -58,10 +61,22 @@ export default function EditListingForm() {
         userRating: form.userRating || undefined,
       };
 
+      if (photo) body.addPhoto = true;
+
       const res = await api.put(`/api/listings/${id}`, body);
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || `Error ${res.status}`);
+      }
+
+      const { uploadUrl } = await res.json();
+      if (photo && uploadUrl) {
+        const s3Res = await fetch(uploadUrl, {
+          method: 'PUT',
+          body: photo,
+          headers: { 'Content-Type': photo.type },
+        });
+        if (!s3Res.ok) throw new Error('Photo upload failed. Changes were saved — try again to add the photo.');
       }
 
       navigate(`/listings/${id}`);
@@ -129,6 +144,41 @@ export default function EditListingForm() {
           <StarRating
             value={form.userRating}
             onChange={(v) => setForm(prev => ({ ...prev, userRating: v }))}
+          />
+        </div>
+
+        {/* Existing Photos */}
+        {existingPhotos.length > 0 && (
+          <div>
+            <label className="text-sm font-medium mb-1.5">Current Photos</label>
+            <div className="grid grid-cols-3 gap-3 mt-1">
+              {existingPhotos.map((url, i) => (
+                <img
+                  key={i}
+                  src={url}
+                  alt={`Photo ${i + 1}`}
+                  className="h-28 w-full object-cover rounded-[var(--radius-md)]"
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Add Photo */}
+        <div>
+          <label className="text-sm font-medium mb-1.5">
+            Add Photo <span className="text-[var(--text-muted)] font-normal">(optional)</span>
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setPhoto(e.target.files[0] || null)}
+            className="w-full text-sm text-[var(--text-secondary)]
+              file:mr-3 file:rounded-[var(--radius-md)] file:border-0
+              file:bg-[var(--gold-muted)] file:px-3 file:py-1.5
+              file:text-sm file:font-medium file:text-[var(--gold)]
+              hover:file:bg-[var(--gold-muted)]"
           />
         </div>
 

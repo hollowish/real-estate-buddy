@@ -110,7 +110,7 @@ exports.handler = async (event) => {
       return response(200, item);
     }
 
-    // PUT /api/listings/{id} — update listing
+    // PUT /api/listings/{id} — update listing (optionally add a photo)
     if (method === 'PUT' && listingId) {
       const item = await getAndVerify(listingId, userId);
       if (item.error) return response(item.status, { error: item.error });
@@ -119,25 +119,41 @@ exports.handler = async (event) => {
                       'mlsNumber', 'userNotes', 'userRating'];
       const sets = ['updatedAt = :updatedAt'];
       const vals = { ':updatedAt': new Date().toISOString() };
+      const names = {};
 
       for (const f of fields) {
         if (body[f] !== undefined) {
           sets.push(`#${f} = :${f}`);
           vals[`:${f}`] = body[f];
+          names[`#${f}`] = f;
         }
+      }
+
+      // If addPhoto is requested, append a new S3 key to the photos array
+      let uploadUrl = null;
+      if (body.addPhoto) {
+        const s3Key = `${userId}/${listingId}/${Date.now()}`;
+        sets.push('#photos = list_append(if_not_exists(#photos, :emptyList), :newPhoto)');
+        vals[':newPhoto'] = [s3Key];
+        vals[':emptyList'] = [];
+        names['#photos'] = 'photos';
+
+        uploadUrl = await getSignedUrl(
+          s3,
+          new PutObjectCommand({ Bucket: BUCKET, Key: s3Key }),
+          { expiresIn: 900 }
+        );
       }
 
       await db.send(new UpdateCommand({
         TableName: TABLE,
         Key: { listingId },
         UpdateExpression: 'SET ' + sets.join(', '),
-        ExpressionAttributeNames: Object.fromEntries(
-          fields.filter(f => body[f] !== undefined).map(f => [`#${f}`, f])
-        ),
+        ExpressionAttributeNames: names,
         ExpressionAttributeValues: vals,
       }));
 
-      return response(200, { message: 'Listing updated' });
+      return response(200, { message: 'Listing updated', uploadUrl });
     }
 
     // DELETE /api/listings/{id} — delete listing (S3 photo cleanup is best-effort)
