@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage'
 import ListingsPage from './components/listings/ListingsPage'
 import ListingDetail from './components/listings/ListingDetail'
 import AddListingForm from './components/listings/AddListingForm'
+import EditListingForm from './components/listings/EditListingForm'
 import ProfilePage from './components/auth/ProfilePage'
 
 export default function App() {
@@ -26,6 +27,9 @@ export default function App() {
           } />
           <Route path="/listings/:id" element={
             <ProtectedRoute><Layout><ListingDetail /></Layout></ProtectedRoute>
+          } />
+          <Route path="/listings/:id/edit" element={
+            <ProtectedRoute><Layout><EditListingForm /></Layout></ProtectedRoute>
           } />
           <Route path="/profile" element={
             <ProtectedRoute><Layout><ProfilePage /></Layout></ProtectedRoute>

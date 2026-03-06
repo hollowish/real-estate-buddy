@@ -24,20 +24,24 @@ export default function ListingsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading…</div>;
-  if (error)   return <div className="p-8 text-center text-red-400">{error}</div>;
+  if (loading) return <div style={{ padding: '2rem', textAlign: 'center', color: '#6b7280' }}>Loading…</div>;
+  if (error)   return <div style={{ padding: '2rem', textAlign: 'center', color: '#f87171' }}>{error}</div>;
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '1.5rem 2rem' }}>
-
+    <div>
       {user && (
-        <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginBottom: '0.5rem' }}>
+        <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginBottom: '0.5rem', marginTop: 0 }}>
           Welcome back,{' '}
           <span style={{ color: '#e5e7eb', fontWeight: 500 }}>{displayName}</span>
         </p>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '2rem',
+      }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#f9fafb', margin: 0 }}>
           My Listings
         </h1>
@@ -52,6 +56,7 @@ export default function ListingsPage() {
             fontWeight: 600,
             border: 'none',
             cursor: 'pointer',
+            whiteSpace: 'nowrap',
           }}
           onMouseOver={e => e.currentTarget.style.background = '#4338ca'}
           onMouseOut={e => e.currentTarget.style.background = '#4f46e5'}
@@ -73,7 +78,7 @@ export default function ListingsPage() {
       ) : (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
           gap: '1.5rem',
         }}>
           {listings.map(listing => (
@@ -85,21 +90,19 @@ export default function ListingsPage() {
   );
 }
 
-// ─── Listing Card ─────────────────────────────────────────────────────────────
 function ListingCard({ listing }) {
   const { listingId, address, price, userRating, aiScore } = listing;
   return (
-    <Link
-      to={`/listings/${listingId}`}
-      style={{ textDecoration: 'none', display: 'block' }}
-    >
-      <div style={{
-        background: '#1e2535',
-        border: '1px solid #374151',
-        borderRadius: '14px',
-        overflow: 'hidden',
-        transition: 'border-color 0.2s, box-shadow 0.2s',
-      }}
+    <Link to={`/listings/${listingId}`} style={{ textDecoration: 'none', display: 'block' }}>
+      <div
+        style={{
+          background: '#1e2535',
+          border: '1px solid #374151',
+          borderRadius: '14px',
+          overflow: 'hidden',
+          transition: 'border-color 0.2s, box-shadow 0.2s',
+          height: '100%',
+        }}
         onMouseOver={e => {
           e.currentTarget.style.borderColor = '#6366f1';
           e.currentTarget.style.boxShadow = '0 4px 24px rgba(99,102,241,0.15)';
@@ -109,7 +112,6 @@ function ListingCard({ listing }) {
           e.currentTarget.style.boxShadow = 'none';
         }}
       >
-        {/* Photo / placeholder */}
         <div style={{
           width: '100%',
           height: '160px',
@@ -121,38 +123,33 @@ function ListingCard({ listing }) {
           <span style={{ fontSize: '3.5rem' }}>🏠</span>
         </div>
 
-        {/* Card body — address, price, footer */}
         <div style={{ padding: '1.25rem 1.5rem 1.5rem' }}>
           <h2 style={{
-            fontSize: '1.1rem',
+            fontSize: '1.05rem',
             fontWeight: 700,
             color: '#f3f4f6',
-            marginBottom: '0.4rem',
-            marginTop: 0,
+            margin: '0 0 0.4rem 0',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
           }}>
             {address}
           </h2>
-
           <p style={{
-            fontSize: '1.2rem',
+            fontSize: '1.15rem',
             fontWeight: 700,
             color: '#818cf8',
-            marginTop: 0,
-            marginBottom: '1rem',
+            margin: '0 0 1rem 0',
           }}>
             ${price?.toLocaleString()}
           </p>
-
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <StarDisplay rating={userRating} />
             {aiScore != null ? (
               <span style={{
                 fontSize: '0.8rem',
                 fontWeight: 700,
-                padding: '0.25rem 0.6rem',
+                padding: '0.25rem 0.65rem',
                 borderRadius: '999px',
                 ...scoreBadgeStyle(aiScore),
               }}>
@@ -168,7 +165,6 @@ function ListingCard({ listing }) {
   );
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 function StarDisplay({ rating }) {
   if (!rating) return <span style={{ fontSize: '0.75rem', color: '#4b5563' }}>No rating</span>;
   return (
@@ -179,7 +175,7 @@ function StarDisplay({ rating }) {
 }
 
 function scoreBadgeStyle(score) {
-  if (score >= 70) return { background: 'rgba(6,78,59,0.5)',  color: '#34d399' };
-  if (score >= 40) return { background: 'rgba(78,63,6,0.5)',  color: '#fbbf24' };
-  return               { background: 'rgba(127,29,29,0.5)', color: '#f87171' };
+  if (score >= 70) return { background: 'rgba(6,78,59,0.5)',   color: '#34d399' };
+  if (score >= 40) return { background: 'rgba(120,100,0,0.4)', color: '#fbbf24' };
+  return               { background: 'rgba(127,29,29,0.5)',  color: '#f87171' };
 }
